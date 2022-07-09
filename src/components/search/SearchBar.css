@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+p{
+    font-family: 'Poppins', sans-serif;
+}
+.search-box{
+    width:40%;
+    /* display: flex; */
+    color:blue;
+    margin: 50px auto 10px auto;
+
+   
+}
+
+.table-container{
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+}
+
+.search-box-input-1{
+    border:2px solid rgb(172, 171, 171);
+    border-radius: 5rem;
+    overflow: hidden;
+    height:60px;
+    margin: 0;
+    padding: 10px;
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+
+}
+
+.search-box-input-2{
+    border: none !important;
+    
+    /* box-sizing: none; */
+    
+}
+
+
+.form-control:focus{
+    
+    box-shadow: none;
+    
+}
+
+.search-input-btn{
+    width: 60px;
+    height: 100%;
+    background-color: rgb(255, 255, 255);
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+.drop-down-container{
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+    margin-top: 0px;
+
+   
+}
+.drop-down{
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+    border-radius: 1rem;
+    margin-top: 0px;
+    display: flex;
+    position: absolute;
+    width:40%;
+    flex-direction: column;
+     border:1px solid rgb(185, 185, 185);
+     /* margin: auto; */
+     justify-content: center;
+     background-color: rgb(255, 255, 255);
+     color: rgb(0, 0, 0);
+     z-index: 10;
+     overflow: hidden;
+}
+.drop-down-list{
+    width: 100%;
+    border-bottom: 1px solid rgb(255, 255, 255);
+    padding:15px;
+    margin: auto;
+}
+.drop-down-list:hover{
+    background-color: grey;
+    color: rgb(255, 255, 255);
+}
+
+.bill-list{
+    position:relative;
+    display: flex;
+    /* border:2px solid black; */
+    border: none;
+    padding: 0;
+    margin: 0;
+   
+}
+
+.bill-row{
+    /* display: flex;
+    position: absolute; */
+    border: 2px solid rgb(89, 0, 255);
+    padding:0px;
+    margin: 0px;
+    background-color: rgb(253, 253, 253);
+   
+}
+
+.bill-col{
+    /* border: 2px solid rgb(0, 0, 0); */
+    padding:0px;
+    margin: 0px;
+}
+
+.bill-list-col-text{
+    
+    color:rgb(0, 0, 0);
+    text-align: center;
+    margin: auto;
+    padding:10px;
+    font-weight: 600;
+}
+
+.sales-btn{
+    margin: 10px;
+    padding: 10px;
+}

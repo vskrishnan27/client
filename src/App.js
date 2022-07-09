@@ -1,24 +1,28 @@
-import logo from './logo.svg';
 import './App.css';
-
+import Navbar from './components/navbar/Navbar'
+import SearchBox from './components/search/SearchBar'
+import ProductListing from './components/productlist/ProductListing';
+import AddProduct from './components/addProduct/AddProduct';
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Lastsale from './components/sales/Lastsale';
+import StockUpdate from './components/updateStocks/StockUpdate'
+import Error500 from './components/Error500';
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <Navbar/>
+        <Routes>
+          <Route path='/' element={<ProductListing/>} />
+          <Route path='/biling' element={< SearchBox />} />
+          <Route path='/addproduct' element={<AddProduct />} />
+          <Route path='/sales' element={<Lastsale />} />
+          <Route path='/updatestock' element={<StockUpdate />} />
+          <Route path='/Error500' element={<Error500 />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
