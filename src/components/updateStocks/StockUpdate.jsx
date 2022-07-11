@@ -121,7 +121,7 @@ const StockUpdate = () => {
         try {
             const removecall = async () => {
                 setloading(true)
-                await axios.post('http://localhost:5000/deleteProduct', { ProductName })
+                await axios.post('https://myappget.herokuapp.com/deleteProduct', { ProductName })
                 const tempList = List.filter((info)=>(
                     info.ProductName!=ProductName
                 ))

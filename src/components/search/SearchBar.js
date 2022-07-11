@@ -33,10 +33,10 @@ const SearchBar = ({ productList }) => {
     const dataapi = async () => {
       try {
         setLoader(true)
-        const info = await axios.get('http://localhost:5000/list')
+        const info = await axios.get('https://myappget.herokuapp.com/list')
         setProductData(info.data)
 
-        const Id = await axios.get('http://localhost:5000/lastsale')
+        const Id = await axios.get('https://myappget.herokuapp.com/lastsale')
         setsalesid(Id.data[0].SalesId + 1)
         setLoader(false)
       } catch (err) {
@@ -81,8 +81,8 @@ const SearchBar = ({ productList }) => {
     try{
     console.log(bill)
     setLoader(true)
-    await axios.post('http://localhost:5000/updateStocks', { bill })
-    await axios.post('http://localhost:5000/sales', { bill })
+    await axios.post('https://myappget.herokuapp.com/updateStocks', { bill })
+    await axios.post('https://myappget.herokuapp.com/sales', { bill })
     setbill([])
     settotalbill(0)
     setsalesid(salesid + 1)

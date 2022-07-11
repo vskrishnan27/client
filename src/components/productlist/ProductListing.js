@@ -28,7 +28,7 @@ const ProductListing = () => {
         try {
             const apicall = async () => {
                 setloading(true)
-                const data = await axios.get('http://localhost:5000/list')
+                const data = await axios.get('https://myappget.herokuapp.com/list')
                 const arr = data.data
                 arr.sort((a,b)=>a.ProductStock-b.ProductStock)
                 setList(arr)
