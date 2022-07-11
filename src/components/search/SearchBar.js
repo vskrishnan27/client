@@ -5,9 +5,11 @@ import { ImSearch } from "react-icons/im";
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Table from 'react-bootstrap/Table'
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = ({ productList }) => {
-  var totalcost = 0;
+  const Navigate = useNavigate()
+  
   const [loader, setLoader] = useState(false)
   const [bill, setbill] = useState([])
   const [qtydata, setqtydata] = useState(1)
@@ -31,12 +33,11 @@ const SearchBar = ({ productList }) => {
     const dataapi = async () => {
       try {
         setLoader(true)
-        const info = await axios.get('http://127.0.0.1:5000/list')
+        const info = await axios.get('http://localhost:5000/list')
         setProductData(info.data)
 
-        const Id = await axios.get('http://127.0.0.1:5000/lastsale')
+        const Id = await axios.get('http://localhost:5000/lastsale')
         setsalesid(Id.data[0].SalesId + 1)
-        console.log('api status 200')
         setLoader(false)
       } catch (err) {
         console.log(err)
@@ -57,11 +58,11 @@ const SearchBar = ({ productList }) => {
       Rate: currentItem.ProductRetailPrice,
       Quantity: qtydata,
       Cost: currentItem.ProductRetailPrice * qtydata,
-      BalanceStock: currentItem.ProductStock - qtydata
+      BalanceStock: currentItem.ProductStock - qtydata,
+      Profit:(currentItem.ProductRetailPrice-currentItem.ProductActualPrice)*qtydata
     }
     settotalbill(newitem.Cost + totalbill)
     setqtydata(1)
-    console.log('totalcost', { totalcost })
     setbill([newitem, ...bill])
     console.log(bill)
   }
@@ -77,15 +78,19 @@ const SearchBar = ({ productList }) => {
   }
 
   const addtosales = async () => {
+    try{
     console.log(bill)
     setLoader(true)
-    await axios.post('http://127.0.0.1:5000/updateStocks', { bill })
-    await axios.post('http://127.0.0.1:5000/sales', { bill })
+    await axios.post('http://localhost:5000/updateStocks', { bill })
+    await axios.post('http://localhost:5000/sales', { bill })
     setbill([])
     settotalbill(0)
     setsalesid(salesid + 1)
-    console.log('loadr false')
     setLoader(false)
+    }catch(err){
+      Navigate('/Error500')
+      console.log(err)
+    }
   }
 
   const deleteProductfromlist = (ind) => {
@@ -188,11 +193,11 @@ const SearchBar = ({ productList }) => {
           </Button>
         </Modal.Footer>
       </Modal>
-      <Container >
+      <Container className="table-main-container">
         {bill.length > 0 && (
           <>
             {
-              <Table striped border hover style={{border:'1px solid black'}} className="table-container">
+              <Table striped hover  className="table-container">
                 <thead>
                   <tr>
                     <th>#</th>

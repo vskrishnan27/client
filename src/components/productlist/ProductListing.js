@@ -1,4 +1,5 @@
-import { useState, useEffect,useNavigate } from "react";
+import { useState, useEffect } from "react";
+import {useNavigate} from 'react-router-dom'
 import { Card, ListGroup, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import './ProductList.css'
@@ -27,7 +28,7 @@ const ProductListing = () => {
         try {
             const apicall = async () => {
                 setloading(true)
-                const data = await axios.get('http://127.0.0.1:5000/list')
+                const data = await axios.get('http://localhost:5000/list')
                 const arr = data.data
                 arr.sort((a,b)=>a.ProductStock-b.ProductStock)
                 setList(arr)
@@ -47,11 +48,11 @@ const ProductListing = () => {
                     <Row>
                         {
                             List.map((data, ind) => (
-                                <Col md={{ span:3 }} xs={{span:2}} key={ind}>
-                                    <Card style={{ width: '18rem', margin: '13px' } } className='product-list-card-style '  >
+                                <Col md={{ span:4 }}  sm ={6}key={ind}>
+                                    <Card style={{ margin: '13px' } } className='product-list-card-style '  >
                                         {/* <Card.Img variant="top" src="holder.js/100px180?text=Image cap" /> */}
-                                        <Card.Body >
-                                            <Card.Title>{data.ProductName}</Card.Title>
+                                        <Card.Body className="card-title-product-listing" >
+                                            <Card.Title className='product-list-card-title'>{data.ProductName}</Card.Title>
                                         </Card.Body>
                                         <ListGroup className="list-group-flush">
                                             <ListGroup.Item>Stock : {data.ProductStock}</ListGroup.Item>

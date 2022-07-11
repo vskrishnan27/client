@@ -6,6 +6,7 @@ import Loader from '../Loader'
 import {useNavigate} from 'react-router-dom'
 
 const AddProduct = () => {
+    
     const navigate = useNavigate();
     const [loader, setLoader] = useState(false)
    
@@ -22,7 +23,7 @@ const AddProduct = () => {
         try {
             setLoader(true)
             const call = async () => {
-                const Id = await axios.get('http://127.0.0.1:5000/list')
+                const Id = await axios.get('http://localhost:5000/list')
                 let newid = (Id.data.length>0 ? Id.data[Id.data.length-1].ProductId : 0 )
                 newid++;
                 console.log(Id)

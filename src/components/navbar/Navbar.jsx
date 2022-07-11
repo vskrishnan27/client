@@ -1,11 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container,Navbar,Nav } from 'react-bootstrap';
 import {NavLink} from 'react-router-dom'
+import './Navbar.css'
 const NavbarComponenet = () =>{
     return(
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" className='navbar-container'>
         <Container>
-          <Navbar.Brand as={NavLink} to='/'>KVS AGRO SERVICES</Navbar.Brand>
+          <Navbar.Brand as={NavLink} to='/' style={{fontWeight:'100'}}>KVS AGRO SERVICES</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">

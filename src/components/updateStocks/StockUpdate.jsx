@@ -3,12 +3,15 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Loader from '../Loader'
 import { Navigate } from "react-router-dom";
+import './update.css'
 const StockUpdate = () => {
   const[refresh,setRefresh] = useState(false)
   const [show, setShow] = useState(false);
   const [modalData,setModalData] = useState({
     id:0,
     stock:0,
+    retail:0,
+    actual:0
   })
     const [loading, setloading] = useState(false)
 
@@ -26,7 +29,7 @@ const StockUpdate = () => {
         try {
             const apicall = async () => {
                 setloading(true)
-                const data = await axios.get('http://127.0.0.1:5000/list')
+                const data = await axios.get('http://localhost:5000/list')
                 setList(data.data)
                 console.log(data.data)
                 setloading(false)
@@ -45,12 +48,16 @@ const StockUpdate = () => {
         ...modalData,
           id:pid,
           prevStock:List[ind].ProductStock,
-          stock:List[ind].ProductStock
+          stock:List[ind].ProductStock,
+          prevActual:List[ind].ProductActualPrice,
+          actual:List[ind].ProductActualPrice,
+          retail:List[ind].ProductRetailPrice,
+          prevRetail:List[ind].ProductRetailPrice
       })
      
     }
 
-    const updatevalinmodal = (val) =>{
+    const updatevalinstockmodal = (val) =>{
       let newval = parseInt(modalData.prevStock)
       console.log(newval)
       newval = newval + parseInt(val)
@@ -60,6 +67,27 @@ const StockUpdate = () => {
          stock: newval
        })
     }
+
+    const updatevalinretailmodal = (val) =>{
+      let newval = parseInt(modalData.prevRetail)
+      console.log(newval)
+      newval = newval + parseInt(val)
+      console.log(newval)
+       setModalData({
+         ...modalData,
+         retail: newval
+       })
+    } 
+    const updatevalinactualmodal = (val) =>{
+      let newval = parseInt(modalData.prevActual)
+      console.log(newval)
+      newval = newval + parseInt(val)
+      console.log(newval)
+       setModalData({
+         ...modalData,
+         actual: newval
+       })
+    } 
     
 
     const editFromList = () =>{
@@ -67,13 +95,14 @@ const StockUpdate = () => {
         if(!isNaN(modalData.stock)){
         const editItem = async() =>{
           setloading(true)
+          handleClose()
             await axios.patch('http://localhost:5000/update',{modalData})
             setModalData({
               id:0,
               stock:0
             })
             setloading(false)
-            handleClose()
+            
             setRefresh(!refresh)
           }
         editItem()
@@ -87,10 +116,12 @@ const StockUpdate = () => {
     }
 
     const removeFromList=(ProductName)=>{
+         if(window.confirm(`Do you want to remove the ${ProductName} product from the market?`)){
+        
         try {
             const removecall = async () => {
                 setloading(true)
-                await axios.post('http://127.0.0.1:5000/deleteProduct', { ProductName })
+                await axios.post('http://localhost:5000/deleteProduct', { ProductName })
                 const tempList = List.filter((info)=>(
                     info.ProductName!=ProductName
                 ))
@@ -101,6 +132,7 @@ const StockUpdate = () => {
         } catch (err) {
             console.log(err);
         }
+      }
     }
 
   return (
@@ -158,21 +190,55 @@ const StockUpdate = () => {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <h5>Previous Stock : {modalData.prevStock}</h5>
+            <Form.Group className="mb-3 update-product-modal" controlId="exampleForm.ControlInput1">
+              <h5 style={{margin:'10px'}}>Previous Stock : {modalData.prevStock}</h5>
               <Form.Control
                 type="number"
+                className="Product-update-txtbox"
                 placeholder="Enter Stock to add"
+                autoFocus
+                onChange={(e)=>
+                  {if(isNaN(e.target.val)){
+                    updatevalinstockmodal(e.target.value)
+                  }}
+                }
+              />
+              <h5 style={{margin:'10px',color:'green'}}>After adding Stock : {modalData.stock}</h5>
+                <hr></hr>
+                {/* =========== */}
+                <h5 style={{margin:'10px'}}>Previous Actual Price : {modalData.prevActual}</h5>
+              <Form.Control
+                type="number"
+                className="Product-update-txtbox"
+                placeholder="Enter Actual Price to add"
                 autoFocus
                 
                 onChange={(e)=>
                   {if(isNaN(e.target.val)){
-                    updatevalinmodal(e.target.value)
+                    updatevalinactualmodal(e.target.value)
                   }}
                 }
               />
+              <h5 style={{margin:'10px',color:'green'}}>After Actual Price : {modalData.actual}</h5>
+                <hr>
+                </hr>
+                <h5 style={{margin:'10px'}}>Previous Retail Price : {modalData.prevRetail}</h5>
+              <Form.Control
+                type="number"
+                className="Product-update-txtbox"
+                placeholder="Enter Retail price to add"
+                autoFocus
+                
+                onChange={(e)=>
+                  {if(isNaN(e.target.val)){
+                    updatevalinretailmodal(e.target.value)
+                  }}
+                }
+              />
+              <h5 style={{margin:'10px',color:'green'}}>After Retail Price : {modalData.retail}</h5>
+                
             </Form.Group>
-            <h5>After adding Stock : {modalData.stock}</h5>
+            
             
           </Form>
         </Modal.Body>

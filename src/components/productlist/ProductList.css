@@ -1,6 +1,14 @@
+
+
 .product-list-card-style{
     box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
 
+}
+
+.product-list-card-style .card-title-product-listing{
+   
+    color: rgb(0, 0, 0);
+    
 }
 
 .loader{

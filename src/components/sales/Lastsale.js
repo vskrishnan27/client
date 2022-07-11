@@ -11,7 +11,7 @@ const Lastsale = () => {
         try{
         const callapi = async () => {
             setLoader(true)
-            const data = await axios.get('http://127.0.0.1:5000/lastsale')
+            const data = await axios.get('http://localhost:5000/lastsale')
             setSalesList(data.data)
             console.log(data.data)
             setLoader(false)
@@ -51,7 +51,7 @@ const Lastsale = () => {
                     <th>Quantity</th>
                     <th>Price</th>
                     <th>Time</th>
-                    <th>Edit</th>
+                   
                   </tr>
                 </thead>
 
@@ -65,9 +65,6 @@ const Lastsale = () => {
                       <td>{data.ProductQty}</td>
                       <td>{data.ProductPrice*data.ProductQty}</td>
                       <td>{data.SalesDate.time}</td>
-                      <td>
-                        <Button variant="primary"  >Edit</Button>
-                      </td>
                     </tr>
                   </tbody>
                 ))
