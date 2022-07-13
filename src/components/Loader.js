@@ -6,15 +6,15 @@ const Loader = ({ load=true }) => {
 {console.log('im in',load)}
 {{load} 
    &&
-   <div className="loader">
-     <Spinner animation="grow" variant="primary" />
-     <Spinner animation="grow" variant="secondary" />
-     <Spinner animation="grow" variant="success" />
-     <Spinner animation="grow" variant="danger" />
-     <Spinner animation="grow" variant="warning" />
-     <Spinner animation="grow" variant="info" />
-     <Spinner animation="grow" variant="light" />
-     <Spinner animation="grow" variant="dark" />
+   <div className="loader" style={{zIndex:'10000'}}>
+     <Spinner style={{zIndex:'10000'}} animation="grow" variant="primary" />
+     <Spinner style={{zIndex:'10000'}} animation="grow" variant="secondary" />
+     <Spinner style={{zIndex:'10000'}} animation="grow" variant="success" />
+     <Spinner style={{zIndex:'10000'}} animation="grow" variant="danger" />
+     <Spinner style={{zIndex:'10000'}} animation="grow" variant="warning" />
+     <Spinner style={{zIndex:'10000'}} animation="grow" variant="info" />
+     <Spinner style={{zIndex:'10000'}} animation="grow" variant="light" />
+     <Spinner style={{zIndex:'10000'}} animation="grow" variant="dark" />
    </div> 
 }
 </>

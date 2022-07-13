@@ -3,9 +3,8 @@ import {useNavigate} from 'react-router-dom'
 import { Card, ListGroup, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import './ProductList.css'
-
 import Loader from '../Loader'
-import Error500 from '../Error500'
+import {FerrisWheelSpinnerOverlay} from 'react-spinner-overlay'
 
 
 
@@ -28,7 +27,7 @@ const ProductListing = () => {
         try {
             const apicall = async () => {
                 setloading(true)
-                const data = await axios.get('https://myappget.herokuapp.com/list')
+                const data = await axios.get('http://localhost:5000/list')
                 const arr = data.data
                 arr.sort((a,b)=>a.ProductStock-b.ProductStock)
                 setList(arr)
@@ -67,8 +66,11 @@ const ProductListing = () => {
                 </Container>
             }
 
-            {loading && <Loader load={loading}></Loader> }
-
+            {/* {loading && <Loader load={loading}></Loader> } */}
+            {loading && 
+            <> <FerrisWheelSpinnerOverlay loading  size={100} color="#FF7626"/> </>
+             }
+                
         </>
     )
 }

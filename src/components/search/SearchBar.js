@@ -18,6 +18,7 @@ const SearchBar = ({ productList }) => {
   const [show, setShow] = useState(false)
   const [totalbill, settotalbill] = useState(0)
   const [salesid, setsalesid] = useState(0)
+  const [Dofetch,setfetch] = useState(false)
 
   const [productData, setProductData] = useState([{
     "_id": "62b01a23628b8808fa2244faaazsdfsd",
@@ -33,10 +34,10 @@ const SearchBar = ({ productList }) => {
     const dataapi = async () => {
       try {
         setLoader(true)
-        const info = await axios.get('https://myappget.herokuapp.com/list')
+        const info = await axios.get('http://localhost:5000/list')
         setProductData(info.data)
 
-        const Id = await axios.get('https://myappget.herokuapp.com/lastsale')
+        const Id = await axios.get('http://localhost:5000/lastsale')
         setsalesid(Id.data[0].SalesId + 1)
         setLoader(false)
       } catch (err) {
@@ -62,6 +63,7 @@ const SearchBar = ({ productList }) => {
       Profit:(currentItem.ProductRetailPrice-currentItem.ProductActualPrice)*qtydata
     }
     settotalbill(newitem.Cost + totalbill)
+    productData[currentItem.index].ProductStock=newitem.BalanceStock
     setqtydata(1)
     setbill([newitem, ...bill])
     console.log(bill)
@@ -70,10 +72,10 @@ const SearchBar = ({ productList }) => {
 
   const handlecancel = () => { setShow(false); setboxvalue(""); }
 
-  const dothisclickaction = (name) => {
+  const dothisclickaction = (name,ind) => {
     setboxvalue(name.ProductName)
     console.log(boxvalue, name);
-    Setcurrentitem(name)
+    Setcurrentitem({...name,index:ind})
     setShow(true)
   }
 
@@ -81,8 +83,8 @@ const SearchBar = ({ productList }) => {
     try{
     console.log(bill)
     setLoader(true)
-    await axios.post('https://myappget.herokuapp.com/updateStocks', { bill })
-    await axios.post('https://myappget.herokuapp.com/sales', { bill })
+    await axios.post('http://localhost:5000/updateStocks', { bill })
+    await axios.post('http://localhost:5000/sales', { bill })
     setbill([])
     settotalbill(0)
     setsalesid(salesid + 1)
@@ -152,7 +154,7 @@ const SearchBar = ({ productList }) => {
           }
           ).map((item, ind) => (
             <div className='drop-down-list' onClick={() => {
-              dothisclickaction(item)
+              dothisclickaction(item,ind)
             }} key={ind}>
               <p>{item.ProductName}</p>
             </div>
@@ -210,7 +212,7 @@ const SearchBar = ({ productList }) => {
                   </tr>
                 </thead>
                 {bill.map((data, ind) => (
-                  <tbody style={{backgroundColor:(ind%2===0)?'#f8f9fa' : '#DFDFDF'}}>
+                  <tbody style={{backgroundColor:(ind%2===0)?'#f8f9fa' : '#DFDFDF'}} key={ind}>
                     <tr>
                       <td>{ind + 1}</td>
                       <td>{data.Id}</td>

@@ -23,7 +23,7 @@ const AddProduct = () => {
         try {
             setLoader(true)
             const call = async () => {
-                const Id = await axios.get('https://myappget.herokuapp.com/list')
+                const Id = await axios.get('http://localhost:5000/list')
                 let newid = (Id.data.length>0 ? Id.data[Id.data.length-1].ProductId : 0 )
                 newid++;
                 console.log(Id)
@@ -40,7 +40,7 @@ const AddProduct = () => {
     const addDetail = async () => {
         try {
             setLoader(true)
-            await axios.post('https://myappget.herokuapp.com/productList',
+            await axios.post('http://localhost:5000/productList',
                 {
                     ProductId: data.ProductId,
                     ProductName: data.ProductName,

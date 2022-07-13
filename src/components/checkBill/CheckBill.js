@@ -13,7 +13,7 @@ const CheckBill = () => {
   const findBill = () => {
     try {
       const findbillapi = async () => {
-        let details = await axios.get("https://myappget.herokuapp.com/findbill", {
+        let details = await axios.get("http://localhost:5000/findbill", {
           params: { billno },
         });
         setBillDetails(details.data);

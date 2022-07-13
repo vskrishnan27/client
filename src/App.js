@@ -8,6 +8,7 @@ import Lastsale from './components/sales/Lastsale';
 import StockUpdate from './components/updateStocks/StockUpdate'
 import Error500 from './components/Error500';
 import CheckBill from './components/checkBill/CheckBill';
+import AddBill from './components/productUpdatedDetails/addBill/AddBill';
 function App() {
 
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path='/updatestock' element={<StockUpdate />} />
           <Route path='/Error500' element={<Error500 />} />
           <Route path='/checkbill' element={<CheckBill/>} />
+          <Route path='/addBill' element={<AddBill/>} />
         </Routes>
       </div>
     </BrowserRouter>
