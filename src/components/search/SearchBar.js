@@ -18,7 +18,7 @@ const SearchBar = ({ productList }) => {
   const [show, setShow] = useState(false)
   const [totalbill, settotalbill] = useState(0)
   const [salesid, setsalesid] = useState(0)
-  const [Dofetch,setfetch] = useState(false)
+
 
   const [productData, setProductData] = useState([{
     "_id": "62b01a23628b8808fa2244faaazsdfsd",
@@ -95,7 +95,7 @@ const SearchBar = ({ productList }) => {
     }
   }
 
-  const deleteProductfromlist = (ind) => {
+  const deleteProductfromlist = (ind,sqty,sid) => {
     var totalcost = 0;
     var newList = []
     bill.forEach((data, index) => {
@@ -106,6 +106,14 @@ const SearchBar = ({ productList }) => {
         console.log(data)
       }
     })
+    var sList = []
+    productData.forEach((data,ind)=>{
+      sList.push(data)
+      if(sid=data.ProductId){
+        sList[ind].ProductStock += parseInt(sqty)
+      }
+    })
+    setProductData(sList)
     setbill(newList)
     settotalbill(totalbill - totalcost)
   }
@@ -221,7 +229,7 @@ const SearchBar = ({ productList }) => {
                       <td>{data.Quantity}</td>
                       <td>{data.Cost}</td>
                       <td>
-                        <Button variant="danger" onClick={() => deleteProductfromlist(ind)} >Remove</Button>
+                        <Button variant="danger" onClick={() => deleteProductfromlist(ind,data.Quantity,data.id)} >Remove</Button>
                       </td>
                     </tr>
                   </tbody>
