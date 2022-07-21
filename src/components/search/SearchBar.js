@@ -1,15 +1,25 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Form, InputGroup, Button, Modal, Container,Spinner } from "react-bootstrap";
+import { Form, InputGroup, Button, Modal, Container, Spinner } from "react-bootstrap";
 import "./SearchBar.css";
-import { ImSearch } from "react-icons/im";
+import { ImCool2, ImSearch } from "react-icons/im";
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Table from 'react-bootstrap/Table'
 import { useNavigate } from "react-router-dom";
+import ReactToPrint from 'react-to-print'
+import { FerrisWheelSpinnerOverlay } from "react-spinner-overlay";
+import BillInvoice from "../billingInvoice/BillInvoice";
+import { useDispatch } from 'react-redux'
+import { updateBill, updateTotalCost, updateUserDetail, updateSalesId } from '../redux/Actions.js'
+
 
 const SearchBar = ({ productList }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+
   const Navigate = useNavigate()
-  
+
   const [loader, setLoader] = useState(false)
   const [bill, setbill] = useState([])
   const [qtydata, setqtydata] = useState(1)
@@ -18,27 +28,23 @@ const SearchBar = ({ productList }) => {
   const [show, setShow] = useState(false)
   const [totalbill, settotalbill] = useState(0)
   const [salesid, setsalesid] = useState(0)
-
-
-  const [productData, setProductData] = useState([{
-    "_id": "62b01a23628b8808fa2244faaazsdfsd",
-    "ProductId": "9999999",
-    "ProductName": "dont click",
-    "ProductActualPrice": 0,
-    "ProductRetailPrice": 0,
-    "ProductStock": 0,
-    "__v": 0
-  }])
+  const [userDetailModal, setUserDetailModal] = useState(true);
+  const [userDetail, setUserDetail] = useState({
+    "name": "",
+    "address": "",
+    "phone": 0
+  })
+  const [productData, setProductData] = useState([])
 
   useEffect(() => {
+
     const dataapi = async () => {
       try {
         setLoader(true)
         const info = await axios.get('http://localhost:5000/list')
         setProductData(info.data)
-
         const Id = await axios.get('http://localhost:5000/lastsale')
-        setsalesid(Id.data[0].SalesId + 1)
+        setsalesid(Id.data[0].salesid + 1)
         setLoader(false)
       } catch (err) {
         console.log(err)
@@ -47,55 +53,74 @@ const SearchBar = ({ productList }) => {
     dataapi()
   }, [])
 
+  const handleUserDetailClose = () => {
+    setUserDetailModal(false)
+    navigate('/')
+  }
 
+  const handleStoreUserDetailModal = () => {
+    dispatch(updateUserDetail(userDetail))
+    setUserDetailModal(false)
+  }
 
   const handleClose = () => {
     setShow(false);
     setboxvalue("");
     const newitem = {
-      SalesId: salesid,
       Id: currentItem.ProductId,
       Name: currentItem.ProductName,
       Rate: currentItem.ProductRetailPrice,
       Quantity: qtydata,
       Cost: currentItem.ProductRetailPrice * qtydata,
       BalanceStock: currentItem.ProductStock - qtydata,
-      Profit:(currentItem.ProductRetailPrice-currentItem.ProductActualPrice)*qtydata
+      Profit: (currentItem.ProductRetailPrice - currentItem.ProductActualPrice) * qtydata
     }
     settotalbill(newitem.Cost + totalbill)
-    productData[currentItem.index].ProductStock=newitem.BalanceStock
+    productData[currentItem.index].ProductStock = newitem.BalanceStock
     setqtydata(1)
     setbill([newitem, ...bill])
-    console.log(bill)
+
   }
 
 
   const handlecancel = () => { setShow(false); setboxvalue(""); }
 
-  const dothisclickaction = (name,ind) => {
+  const dothisclickaction = (name, ind) => {
     setboxvalue(name.ProductName)
-    console.log(boxvalue, name);
-    Setcurrentitem({...name,index:ind})
+
+    Setcurrentitem({ ...name, index: ind })
     setShow(true)
   }
 
-  const addtosales = async () => {
-    try{
-    console.log(bill)
-    setLoader(true)
-    await axios.post('http://localhost:5000/updateStocks', { bill })
-    await axios.post('http://localhost:5000/sales', { bill })
-    setbill([])
-    settotalbill(0)
-    setsalesid(salesid + 1)
-    setLoader(false)
-    }catch(err){
+  const addtosales = async (print) => {
+    try {
+      setLoader(true)
+      const schemaBill = {
+        salesid: salesid,
+        userDetail: userDetail,
+        products: bill
+      }
+
+      await axios.post('http://localhost:5000/updateStocks', { bill })
+      await axios.post('http://localhost:5000/sales', { schemaBill })
+      console.log(bill)
+      setbill([])
+      settotalbill(0)
+      dispatch(updateSalesId(salesid))
+      setsalesid(salesid + 1)
+      setLoader(false)
+      dispatch(updateBill(bill))
+      dispatch(updateTotalCost(totalbill))
+      if (print) {
+        navigate('/billInvoice')
+      }
+    } catch (err) {
       Navigate('/Error500')
       console.log(err)
     }
   }
 
-  const deleteProductfromlist = (ind,sqty,sid) => {
+  const deleteProductfromlist = (ind, sqty, sid) => {
     var totalcost = 0;
     var newList = []
     bill.forEach((data, index) => {
@@ -103,13 +128,13 @@ const SearchBar = ({ productList }) => {
         newList.push(data)
       } else {
         totalcost = totalcost + (data.Quantity * data.Rate)
-        console.log(data)
+
       }
     })
     var sList = []
-    productData.forEach((data,ind)=>{
+    productData.forEach((data, ind) => {
       sList.push(data)
-      if(sid=data.ProductId){
+      if (sid = data.ProductId) {
         sList[ind].ProductStock += parseInt(sqty)
       }
     })
@@ -124,171 +149,217 @@ const SearchBar = ({ productList }) => {
 
 
     <>
-    {!loader &&
-    <>
-      
 
-      <div className="search-box">
-        <InputGroup className="search-box-input-1">
-          <Form.Control
-            className="search-box-input-2"
-            placeholder="Search Product"
-            aria-label="Search Product"
-            aria-describedby="basic-addon1"
-            value={boxvalue}
-            onChange={(e) => {
-              setboxvalue(e.target.value);
-              console.log()
-            }}
-          />
-          <Button
-            className="search-input-btn"
-          >
-            <ImSearch />
-          </Button>
+      {!loader &&
+        <>
 
-        </InputGroup>
-      </div>
-      <div className="drop-down-container" style={{
-        display: 'flex',
-        margin: 'auto'
 
-      }}>
-        {<div className="drop-down">
-          {productData.filter((item) => {
-            const val = item.ProductName.toLowerCase();
-            const search = boxvalue.toLowerCase();
-            return search && val.startsWith(search) 
-          }
-          ).map((item, ind) => (
-            <div className='drop-down-list' onClick={() => {
-              dothisclickaction(item,ind)
-            }} key={ind}>
-              <p>{item.ProductName}</p>
-            </div>
-          )).slice(0, 10)
-          }
-        </div>}
-      </div>
+          <div className="search-box">
+            <InputGroup className="search-box-input-1">
+              <Form.Control
+                className="search-box-input-2"
+                placeholder="Search Product"
+                aria-label="Search Product"
+                aria-describedby="basic-addon1"
+                value={boxvalue}
+                onChange={(e) => {
+                  setboxvalue(e.target.value);
 
-      <Modal show={show} onHide={handlecancel}>
-        <Modal.Header closeButton>
-          <Modal.Title>{boxvalue}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h5>{`In-Stock :${currentItem.ProductStock} `}</h5>
-          <h5>{`Price :${currentItem.ProductRetailPrice} `}</h5>
-          <Form.Control className="mt-3"
-            placeholder="Enter Quantity"
-            aria-label="Enter Quantity"
-            aria-describedby="basic-addon1"
-            value={qtydata}
-            onChange={(e) => {
-              if (!isNaN(e.target.value)) {
-                setqtydata(e.target.value)
+                }}
+              />
+              <Button
+                className="search-input-btn"
+              >
+                <ImSearch />
+              </Button>
+
+            </InputGroup>
+          </div>
+          <div className="drop-down-container" style={{
+            display: 'flex',
+            margin: 'auto'
+
+          }}>
+            {<div className="drop-down">
+              {productData.filter((item) => {
+                const val = item.ProductName.toLowerCase();
+                const search = boxvalue.toLowerCase();
+                return search && val.startsWith(search)
               }
-            }
-            }
-          />
-          <h5 className="mt-3">Total-Cost : {(currentItem.ProductRetailPrice * qtydata)}</h5>
-          <h5 className="mt-3" style={{ color: (currentItem.ProductStock - qtydata) >= 0 ? "black" : "red" }}>Balance Stock : {(currentItem.ProductStock - qtydata)}</h5>
+              ).map((item, ind) => (
+                <div className='drop-down-list' onClick={() => {
+                  dothisclickaction(item, ind)
+                }} key={ind}>
+                  <p>{item.ProductName}</p>
+                </div>
+              )).slice(0, 10)
+              }
+            </div>}
+          </div>
 
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={handlecancel}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={handleClose} disabled={(currentItem.ProductStock - qtydata) >= 0 && (currentItem.ProductStock !== (currentItem.ProductStock - qtydata)) ? false : true}>
-            Add to bill
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <Container className="table-main-container">
-        {bill.length > 0 && (
-          <>
-            {
-              <Table striped hover  className="table-container">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Rate</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Remove</th>
-                  </tr>
-                </thead>
-                {bill.map((data, ind) => (
-                  <tbody style={{backgroundColor:(ind%2===0)?'#f8f9fa' : '#DFDFDF'}} key={ind}>
-                    <tr>
-                      <td>{ind + 1}</td>
-                      <td>{data.Id}</td>
-                      <td>{data.Name}</td>
-                      <td>{data.Rate}</td>
-                      <td>{data.Quantity}</td>
-                      <td>{data.Cost}</td>
-                      <td>
-                        <Button variant="danger" onClick={() => deleteProductfromlist(ind,data.Quantity,data.id)} >Remove</Button>
-                      </td>
-                    </tr>
-                  </tbody>
-                ))}
-                <tbody >
-                  <tr style={{backgroundColor:'#C70039'}} >
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style={{color:'white'}}>Net Total</td>
-                    <td style={{color:'white'}}>{totalbill}</td>
-                    <td></td>
-                  </tr>
-                </tbody>
+          <Modal show={show} onHide={handlecancel}>
+            <Modal.Header closeButton>
+              <Modal.Title>{boxvalue}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <h5>{`In-Stock :${currentItem.ProductStock} `}</h5>
+              <h5>{`Price :${currentItem.ProductRetailPrice} `}</h5>
+              <Form.Control className="mt-3"
+                placeholder="Enter Quantity"
+                aria-label="Enter Quantity"
+                aria-describedby="basic-addon1"
+                value={qtydata}
+                onChange={(e) => {
+                  if (!isNaN(e.target.value)) {
+                    setqtydata(e.target.value)
+                  }
+                }
+                }
+              />
+              <h5 className="mt-3">Total-Cost : {(currentItem.ProductRetailPrice * qtydata)}</h5>
+              <h5 className="mt-3" style={{ color: (currentItem.ProductStock - qtydata) >= 0 ? "black" : "red" }}>Balance Stock : {(currentItem.ProductStock - qtydata)}</h5>
 
-              </Table>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="danger" onClick={handlecancel}>
+                Cancel
+              </Button>
+              <Button variant="primary" onClick={handleClose} disabled={(currentItem.ProductStock - qtydata) >= 0 && (currentItem.ProductStock !== (currentItem.ProductStock - qtydata)) ? false : true}>
+                Add to bill
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          <Container className="table-main-container">
+            {bill.length > 0 && (
+              <>
+                {
+                  <>
+
+                    <div >
+                      <Table hover className="table-container" >
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Rate</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th >Remove</th>
+                          </tr>
+                        </thead>
+                        {bill.map((data, ind) => (
+                          <tbody style={{ backgroundColor: (ind % 2 === 0) ? '#f8f9fa' : '#DFDFDF' }} key={ind}>
+                            <tr>
+                              <td>{ind + 1}</td>
+                              <td>{data.Id}</td>
+                              <td>{data.Name}</td>
+                              <td>{data.Rate}</td>
+                              <td>{data.Quantity}</td>
+                              <td>{data.Cost}</td>
+                              <td >
+                                <Button variant="danger" onClick={() => deleteProductfromlist(ind, data.Quantity, data.id)} >Remove</Button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        ))}
+                        <tbody >
+
+                          <tr className="net-total-red" >
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td >Net Total</td>
+                            <td >{totalbill}</td>
+                            <td ></td>
+                          </tr>
+                        </tbody>
+                      </Table>
+
+                    </div>
+                  </>
+                }
+                < div >
+                </div>
+
+                <div >
+                  <Button variant="dark" className="sales-btn p-2" onClick={() => addtosales(true)}>Add to sales & Print Bill</Button>
+                  <Button variant="dark" className="sales-btn p-2" onClick={() => addtosales(false)}>Add to sales</Button>
+                </div>
+              </>
+
+            )
             }
-            < div >
-            </div>
-            <div>
-              <Button variant="dark" className="sales-btn">Add to sales & print bill</Button>
-              <Button variant="dark" className="sales-btn" onClick={() => addtosales()}>Add to sales</Button>
-            </div>
-          </>
-
-        )
-        }
-      </Container>
-      </>
+          </Container>
+        </>
       }
 
       {loader &&
-
-<div className="loader">
-<Spinner animation="grow" variant="primary" />
-<Spinner animation="grow" variant="secondary" />
-<Spinner animation="grow" variant="success" />
-<Spinner animation="grow" variant="danger" />
-<Spinner animation="grow" variant="warning" />
-<Spinner animation="grow" variant="info" />
-<Spinner animation="grow" variant="light" />
-<Spinner animation="grow" variant="dark" />
-</div>
-
+        <> <FerrisWheelSpinnerOverlay loading size={100} color="#FF7626" /> </>
       }
 
+
+      <>
+        <Modal show={userDetailModal} onHide={handleUserDetailClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Buyer Details</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group>
+                <Form.Control type='text'
+                  placeholder='Enter Buyer Name'
+                  className="mt-3"
+                  style={{ boxShadow: '0 5px 5px rgb(0,0,0,0.1)' }}
+                  onChange={(e) => setUserDetail(
+                    {
+                      ...userDetail,
+                      name: e.target.value
+                    }
+                  )}
+                />
+                <Form.Control
+                  type='text'
+                  placeholder='Enter Buyer City'
+                  className="mt-3"
+                  style={{ boxShadow: '0 5px 5px rgb(0,0,0,0.1)' }}
+                  onChange={(e) => setUserDetail(
+                    {
+                      ...userDetail,
+                      address: e.target.value
+                    }
+                  )}
+                />
+                <Form.Control type='number' placeholder='Enter Buyer Phone Number' className="mt-3"
+                  style={{ boxShadow: '0 5px 5px rgb(0,0,0,0.1)' }}
+                  onChange={(e) => setUserDetail(
+                    {
+                      ...userDetail,
+                      phone: e.target.value
+                    }
+                  )}
+                />
+              </Form.Group>
+            </Form>
+
+
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleUserDetailClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleStoreUserDetailModal}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </>
+
+
+
     </>
-      
   )
 }
 
 export default SearchBar;
-
-
-
-
-
-
-
-
-

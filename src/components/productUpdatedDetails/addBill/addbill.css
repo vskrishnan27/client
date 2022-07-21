@@ -1,0 +1,66 @@
+.invoice-input-text-box{
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.3);
+    margin: auto;
+    padding: 30px;
+  
+    height:60px;
+    border: 1px solid rgb(194, 191, 191);
+
+}
+
+
+
+.invoice-container{
+   
+    margin: 0;
+    padding: 0;
+}
+.invoice-text-contianer{
+    margin: auto;
+}
+
+
+.update-product-invoice{
+    
+    /* background-color: #444; */
+    width:50%;
+    margin: 20px auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+}
+
+.update-product-invoice .invoice-input-text-box{
+    width:80%;
+}
+
+
+
+
+.drop-down-list-invoice{
+    position: absolute;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    
+    width:70%;
+    box-shadow: -2px 4px 20px -3px rgba(0,0,0,0.75);
+    box-sizing: border-box;
+   
+    
+
+}
+
+.drop-list{
+    padding: 10px;
+    margin:auto;
+    color: rgb(0, 0, 0);
+}
+
+.drop-list:hover{
+    padding: 10px;
+    margin:auto;
+    background-color: black;
+    color: rgb(255, 255, 255);
+}

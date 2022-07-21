@@ -12,15 +12,7 @@ const ProductListing = () => {
    
     const [loading, setloading] = useState(false)
 
-    const [List, setList] = useState([{
-        "_id": "62b01a23628b8808fa2244fa",
-        "ProductId": "1",
-        "ProductName": "Growth rgulator",
-        "ProductActualPrice": 1000,
-        "ProductRetailPrice": 8000,
-        "ProductStock": 0,
-        "__v": 0
-    }])
+    const [List, setList] = useState([])
 
     useEffect(() => {
         const navigate = useNavigate
@@ -66,7 +58,7 @@ const ProductListing = () => {
                 </Container>
             }
 
-            {/* {loading && <Loader load={loading}></Loader> } */}
+            
             {loading && 
             <> <FerrisWheelSpinnerOverlay loading  size={100} color="#FF7626"/> </>
              }

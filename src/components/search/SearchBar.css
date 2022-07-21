@@ -129,3 +129,13 @@
     margin: 10px;
     padding: 10px;
 }
+
+.net-total-red{
+    background-color: #C70039;
+    color: white;
+}
+
+.net-total-normal{
+    background-color: white;
+    color: black;
+}

@@ -1,21 +1,23 @@
 import { Container, Form, Button, Col } from "react-bootstrap";
 import './AddProduct.css'
 import axios from 'axios'
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import Loader from '../Loader'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const AddProduct = () => {
-    
+
     const navigate = useNavigate();
     const [loader, setLoader] = useState(false)
-   
-    const [data, setData] = useState( {
+
+    const [data, setData] = useState({
         ProductId: 0,
         ProductName: '',
         ProductActualPrice: '',
         ProductRetailPrice: '',
-        ProductStock: ''
+        ProductStock: '',
+        GSTPrice: '',
+        GSTPercentage: ''
     })
 
 
@@ -24,18 +26,17 @@ const AddProduct = () => {
             setLoader(true)
             const call = async () => {
                 const Id = await axios.get('http://localhost:5000/list')
-                let newid = (Id.data.length>0 ? Id.data[Id.data.length-1].ProductId : 0 )
+                let newid = (Id.data.length > 0 ? Id.data[Id.data.length - 1].ProductId : 0)
                 newid++;
                 console.log(Id)
-                setData({...data,ProductId:newid })
-                // console.log(data)
+                setData({ ...data, ProductId: newid })
                 setLoader(false)
             }
             call()
         } catch (err) {
             console.log(err)
         }
-    },[])
+    }, [])
 
     const addDetail = async () => {
         try {
@@ -46,7 +47,9 @@ const AddProduct = () => {
                     ProductName: data.ProductName,
                     ProductActualPrice: data.ProductActualPrice,
                     ProductRetailPrice: data.ProductRetailPrice,
-                    ProductStock: data.ProductStock
+                    ProductStock: data.ProductStock,
+                    GSTPercentage: data.GSTPercentage,
+                    GSTPrice: data.GSTPrice
                 }
             )
             setLoader(false)
@@ -78,7 +81,7 @@ const AddProduct = () => {
                             aria-describedby="basic-addon1"
                             value={data.ProductName}
                             onChange={(e) => {
-                                setData({...data,ProductName:e.target.value});
+                                setData({ ...data, ProductName: e.target.value });
                             }}
                         />
                         <Form.Control
@@ -88,7 +91,7 @@ const AddProduct = () => {
                             aria-describedby="basic-addon1"
                             value={data.ProductRetailPrice}
                             onChange={(e) => {
-                                setData({...data,ProductRetailPrice:e.target.value});
+                                setData({ ...data, ProductRetailPrice: e.target.value });
                             }}
                         />
                         <Form.Control
@@ -98,7 +101,7 @@ const AddProduct = () => {
                             aria-describedby="basic-addon1"
                             value={data.ProductActualPrice}
                             onChange={(e) => {
-                                setData({...data,ProductActualPrice:e.target.value});
+                                setData({ ...data, ProductActualPrice: e.target.value });
                                 console.log()
                             }}
                         />
@@ -109,19 +112,41 @@ const AddProduct = () => {
                             aria-describedby="basic-addon1"
                             value={data.ProductStock}
                             onChange={(e) => {
-                                setData({...data,ProductStock:e.target.value});
+                                setData({ ...data, ProductStock: e.target.value });
                                 console.log()
                             }}
                         />
-                        <Button variant='dark' className='add-product-btn' onClick={()=>addDetail()}>Add Product to Market</Button>
+                        <Form.Control
+                            className="input-text-box mt-5"
+                            placeholder="GST Percentage"
+                            aria-label="GST Percentage"
+                            aria-describedby="basic-addon1"
+                            value={data.GSTPercentage}
+                            onChange={(e) => {
+                                setData({ ...data, GSTPercentage: e.target.value });
+                                console.log()
+                            }}
+                        />
+                        <Form.Control
+                            className="input-text-box mt-5"
+                            placeholder="GST Price"
+                            aria-label="GST Price"
+                            aria-describedby="basic-addon1"
+                            value={data.GSTPrice}
+                            onChange={(e) => {
+                                setData({ ...data, GSTPrice: e.target.value });
+                                console.log()
+                            }}
+                        />
+                        <Button variant='dark' className='add-product-btn' onClick={() => addDetail()}>Add Product to Market</Button>
                     </div>
                 </Container>
             </Col>
-        }
-        {
-            loader && 
-            <Loader/>
-        }
+            }
+            {
+                loader &&
+                <Loader />
+            }
         </>
     )
 }
