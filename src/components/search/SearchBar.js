@@ -32,9 +32,12 @@ const SearchBar = ({ productList }) => {
   const [userDetail, setUserDetail] = useState({
     "name": "",
     "address": "",
-    "phone": 0
+    "phone": 0,
+    "borrow": 0
   })
   const [productData, setProductData] = useState([])
+  const [amount, setAmount] = useState(0)
+  const [borrowButton, setborrowButton] = useState(true)
 
   useEffect(() => {
 
@@ -58,9 +61,31 @@ const SearchBar = ({ productList }) => {
     navigate('/')
   }
 
-  const handleStoreUserDetailModal = () => {
-    dispatch(updateUserDetail(userDetail))
+  const handleStoreUserDetailModal = async () => {
     setUserDetailModal(false)
+    setLoader(true)
+    var data = await axios.get(`http://localhost:5000/borrow?phone=${userDetail.phone}`)
+
+    console.log(data)
+    if (!data.data || data.data.length == 0) {
+      setUserDetail(
+        {
+          ...userDetail,
+          borrow: 0
+        }
+      )
+    } else {
+      setUserDetail(
+        {
+          ...userDetail,
+          borrow: data.data[0].userDetail.borrow
+        }
+      )
+    }
+
+    dispatch(updateUserDetail(userDetail))
+
+    setLoader(false)
   }
 
   const handleClose = () => {
@@ -73,7 +98,10 @@ const SearchBar = ({ productList }) => {
       Quantity: qtydata,
       Cost: currentItem.ProductRetailPrice * qtydata,
       BalanceStock: currentItem.ProductStock - qtydata,
-      Profit: (currentItem.ProductRetailPrice - currentItem.ProductActualPrice) * qtydata
+      Profit: (currentItem.ProductRetailPrice - currentItem.ProductActualPrice) * qtydata,
+      GSTPercentage: currentItem.GSTPercentage,
+      GSTPrice: currentItem.GSTPrice
+
     }
     settotalbill(newitem.Cost + totalbill)
     productData[currentItem.index].ProductStock = newitem.BalanceStock
@@ -93,6 +121,7 @@ const SearchBar = ({ productList }) => {
   }
 
   const addtosales = async (print) => {
+
     try {
       setLoader(true)
       const schemaBill = {
@@ -103,7 +132,7 @@ const SearchBar = ({ productList }) => {
 
       await axios.post('http://localhost:5000/updateStocks', { bill })
       await axios.post('http://localhost:5000/sales', { schemaBill })
-      console.log(bill)
+
       setbill([])
       settotalbill(0)
       dispatch(updateSalesId(salesid))
@@ -150,8 +179,19 @@ const SearchBar = ({ productList }) => {
 
     <>
 
+
+
+
       {!loader &&
         <>
+          <Container>
+            <div className="d-flex justify-content-center justify-content-between m-2" >
+              <p>Name : <b>{userDetail.name}</b></p>
+              <p>City :<b>{userDetail.address}</b></p>
+              <p>Phone : <b>{userDetail.phone}</b></p>
+              <p>Borrow : <mark>{userDetail.borrow}</mark></p>
+            </div>
+          </Container>
 
 
           <div className="search-box">
@@ -282,7 +322,33 @@ const SearchBar = ({ productList }) => {
                 }
                 < div >
                 </div>
+                <div className="d-flex m-2 justify-content-around">
+                  <Form>
 
+                    <Form.Control
+                      placeholder="Amount Given"
+                      onChange={(e) => {
+                        if (!isNaN(e.target.value)) {
+                          setAmount(e.target.value)
+                        }
+                      }}
+                    />
+                  </Form>
+
+                  <p> Balance(with borrow) : {totalbill + userDetail.borrow - amount}</p>
+                  <Button
+                    onClick={() => {
+                      setUserDetail(
+                        {
+                          ...userDetail,
+                          borrow: totalbill + userDetail.borrow - amount
+                        })
+                    }
+                    }
+                  >Add borrow</Button>
+
+
+                </div>
                 <div >
                   <Button variant="dark" className="sales-btn p-2" onClick={() => addtosales(true)}>Add to sales & Print Bill</Button>
                   <Button variant="dark" className="sales-btn p-2" onClick={() => addtosales(false)}>Add to sales</Button>
@@ -291,11 +357,13 @@ const SearchBar = ({ productList }) => {
 
             )
             }
+
           </Container>
         </>
       }
 
-      {loader &&
+      {
+        loader &&
         <> <FerrisWheelSpinnerOverlay loading size={100} color="#FF7626" /> </>
       }
 

@@ -1,0 +1,9 @@
+.invoice-container .invoice-container .invoice {
+    font-size: 12px;
+}
+
+
+.invoice-container .invoice-container .invoice .td {
+    padding: 0px;
+    margin: 0px;
+}

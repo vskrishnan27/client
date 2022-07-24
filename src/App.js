@@ -11,30 +11,32 @@ import CheckBill from './components/checkBill/CheckBill';
 import AddBill from './components/productUpdatedDetails/addBill/AddBill';
 import RetriveBill from './components/productUpdatedDetails/retriveBill/RetriveBill'
 import BillInvoice from './components/billingInvoice/BillInvoice'
-import {Provider} from 'react-redux'
-import {billListReducer} from './components/redux/Reducer.js'
-import {createStore} from 'redux'
+import GstBill from './components/GstBill/GstBill'
+import { Provider } from 'react-redux'
+import { billListReducer } from './components/redux/Reducer.js'
+import { createStore } from 'redux'
 function App() {
-      const Store = createStore(billListReducer)
+  const Store = createStore(billListReducer)
   return (
-    <Provider store = {Store}>
-    <BrowserRouter>
-      <div className="App">
-        <Navbar/>
-        <Routes>
-          <Route path='/' element={<ProductListing/>} />
-          <Route path='/biling' element={< SearchBox />} />
-          <Route path='/addproduct' element={<AddProduct />} />
-          <Route path='/sales' element={<Lastsale />} />
-          <Route path='/updatestock' element={<StockUpdate />} />
-          <Route path='/Error500' element={<Error500 />} />
-          <Route path='/checkbill' element={<CheckBill/>} />
-          <Route path='/addBill' element={<AddBill/>} />
-          <Route path='/retriveBill' element={<RetriveBill/>} />
-          <Route path='/billInvoice' element={<BillInvoice/>} />
-        </Routes>
-      </div>
-    </BrowserRouter>
+    <Provider store={Store}>
+      <BrowserRouter>
+        <div className="App">
+          <Navbar />
+          <Routes>
+            <Route path='/' element={<ProductListing />} />
+            <Route path='/biling' element={< SearchBox />} />
+            <Route path='/addproduct' element={<AddProduct />} />
+            <Route path='/sales' element={<Lastsale />} />
+            <Route path='/updatestock' element={<StockUpdate />} />
+            <Route path='/Error500' element={<Error500 />} />
+            <Route path='/checkbill' element={<CheckBill />} />
+            <Route path='/addBill' element={<AddBill />} />
+            <Route path='/retriveBill' element={<RetriveBill />} />
+            <Route path='/billInvoice' element={<BillInvoice />} />
+            <Route path='/gstbill' element={<GstBill />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
     </Provider>
   );
 }
