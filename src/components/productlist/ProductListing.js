@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Card, ListGroup, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import './ProductList.css'
 import Loader from '../Loader'
-import {FerrisWheelSpinnerOverlay} from 'react-spinner-overlay'
+import { FerrisWheelSpinnerOverlay } from 'react-spinner-overlay'
 
 
 
 const ProductListing = () => {
-   
+
     const [loading, setloading] = useState(false)
 
     const [List, setList] = useState([])
@@ -19,9 +19,9 @@ const ProductListing = () => {
         try {
             const apicall = async () => {
                 setloading(true)
-                const data = await axios.get('http://localhost:5000/list')
+                const data = await axios.get('https://myappget.herokuapp.com/list')
                 const arr = data.data
-                arr.sort((a,b)=>a.ProductStock-b.ProductStock)
+                arr.sort((a, b) => a.ProductStock - b.ProductStock)
                 setList(arr)
                 setloading(false)
             }
@@ -39,8 +39,8 @@ const ProductListing = () => {
                     <Row>
                         {
                             List.map((data, ind) => (
-                                <Col md={{ span:4 }}  sm ={6}key={ind}>
-                                    <Card style={{ margin: '13px' } } className='product-list-card-style '  >
+                                <Col md={{ span: 4 }} sm={6} key={ind}>
+                                    <Card style={{ margin: '13px' }} className='product-list-card-style '  >
                                         {/* <Card.Img variant="top" src="holder.js/100px180?text=Image cap" /> */}
                                         <Card.Body className="card-title-product-listing" >
                                             <Card.Title className='product-list-card-title'>{data.ProductName}</Card.Title>
@@ -58,11 +58,11 @@ const ProductListing = () => {
                 </Container>
             }
 
-            
-            {loading && 
-            <> <FerrisWheelSpinnerOverlay loading  size={100} color="#FF7626"/> </>
-             }
-                
+
+            {loading &&
+                <> <FerrisWheelSpinnerOverlay loading size={100} color="#FF7626" /> </>
+            }
+
         </>
     )
 }

@@ -158,6 +158,7 @@ function BillInvoice() {
           </div>
         </Container>
       </div>
+
       <ReactToPrint
         trigger={() => <Button>Print this out!</Button>}
         content={() => componentRef.current}

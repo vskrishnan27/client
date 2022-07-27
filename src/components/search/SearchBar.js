@@ -44,9 +44,9 @@ const SearchBar = ({ productList }) => {
     const dataapi = async () => {
       try {
         setLoader(true)
-        const info = await axios.get('http://localhost:5000/list')
+        const info = await axios.get('https://myappget.herokuapp.com/list')
         setProductData(info.data)
-        const Id = await axios.get('http://localhost:5000/lastsale')
+        const Id = await axios.get('https://myappget.herokuapp.com/lastsale')
         setsalesid(Id.data[0].salesid + 1)
         setLoader(false)
       } catch (err) {
@@ -64,7 +64,7 @@ const SearchBar = ({ productList }) => {
   const handleStoreUserDetailModal = async () => {
     setUserDetailModal(false)
     setLoader(true)
-    var data = await axios.get(`http://localhost:5000/borrow?phone=${userDetail.phone}`)
+    var data = await axios.get(`https://myappget.herokuapp.com/borrow?phone=${userDetail.phone}`)
 
     console.log(data)
     if (!data.data || data.data.length == 0) {
@@ -121,17 +121,29 @@ const SearchBar = ({ productList }) => {
   }
 
   const addtosales = async (print) => {
+    // () => {
+    // setUserDetail(
+    //   {
+    //     ...userDetail,
+    //     borrow: totalbill + userDetail.borrow - amount
+    //   })
+    // // setborrowButton(false)
+    // addtosales(true)
+    // }
 
     try {
       setLoader(true)
       const schemaBill = {
         salesid: salesid,
-        userDetail: userDetail,
+        userDetail: {
+          ...userDetail,
+          borrow: totalbill + userDetail.borrow - amount
+        },
         products: bill
       }
 
-      await axios.post('http://localhost:5000/updateStocks', { bill })
-      await axios.post('http://localhost:5000/sales', { schemaBill })
+      await axios.post('https://myappget.herokuapp.com/updateStocks', { bill })
+      await axios.post('https://myappget.herokuapp.com/sales', { schemaBill })
 
       setbill([])
       settotalbill(0)
@@ -335,23 +347,15 @@ const SearchBar = ({ productList }) => {
                     />
                   </Form>
 
+
+
                   <p> Balance(with borrow) : {totalbill + userDetail.borrow - amount}</p>
-                  <Button
-                    onClick={() => {
-                      setUserDetail(
-                        {
-                          ...userDetail,
-                          borrow: totalbill + userDetail.borrow - amount
-                        })
-                    }
-                    }
-                  >Add borrow</Button>
+
 
 
                 </div>
                 <div >
                   <Button variant="dark" className="sales-btn p-2" onClick={() => addtosales(true)}>Add to sales & Print Bill</Button>
-                  <Button variant="dark" className="sales-btn p-2" onClick={() => addtosales(false)}>Add to sales</Button>
                 </div>
               </>
 

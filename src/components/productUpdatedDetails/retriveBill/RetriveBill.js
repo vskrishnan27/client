@@ -7,13 +7,13 @@ import { FerrisWheelSpinnerOverlay } from "react-spinner-overlay";
 
 const RetriveBill = () => {
   const [billno, setbillno] = useState('')
-  const [list, setList] = useState({});
+  const [list, setList] = useState();
 
   const findBill = async () => {
     try {
-      const data = await axios.get(`http://localhost:5000/invoice/viewInvoice?invoiceNum=${billno}`)
-      console.log(data.data)
-      setList(data.data)
+      const data = await axios.get(`https://myappget.herokuapp.com/invoice/viewInvoice?invoiceNum=${billno}`)
+      console.log(data.data[0])
+      setList(data.data[0])
     } catch (err) {
       console.log(err)
     }
@@ -51,7 +51,47 @@ const RetriveBill = () => {
         </Button>
       </div>
       <div>
-        {list.length > 0 ? <>
+        {list ? <>
+
+          <div className="d-flex justify-content-between">
+            <div style={{ textAlign: "left" }}>
+              <p>Created At : {list.createdAt}</p>
+              <p>Invoice Num : {list.invoiceNum}</p>
+            </div>
+            <div style={{ textAlign: "left" }}>
+              <p>Shop Name : {list.shopName}</p>
+              <p>Shop Address : {list.shopAddress}</p>
+            </div>
+          </div>
+          <div>
+            {
+              <Table style={{ border: "1px solid grey" }}>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Total Price</th>
+                  </tr>
+                </thead>
+                <tbody >
+                  {list.product?.map((data, ind) => (
+                    <tr>
+                      <td>{ind + 1}</td>
+                      <td>{data.name}</td>
+                      <td>{data.qty}</td>
+                      <td>{data.cost}</td>
+                      <td>{data.qty * data.cost}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            }
+            <p>Total cost : <b>{list.totalCost}</b></p>
+          </div>
+
+
         </>
           :
           <>
@@ -59,7 +99,7 @@ const RetriveBill = () => {
           </>
         }
       </div>
-    </Container>
+    </Container >
   )
 }
 

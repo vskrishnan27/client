@@ -17,7 +17,7 @@ const GstBill = () => {
     const findBill = async () => {
         try {
             setLoader(true)
-            const data = await axios.get(`http://localhost:5000/gstbill/findGstBill?num=${billno}`)
+            const data = await axios.get(`https://myappget.herokuapp.com/gstbill/findGstBill?num=${billno}`)
             setList(data.data)
             console.log(data)
             setLoader(false)
@@ -32,7 +32,7 @@ const GstBill = () => {
                 <div className="check-bill-container">
                     <Form.Control
                         aria-label="Text input with radio button"
-                        placeholder="Enter invoice bill number"
+                        placeholder="Enter GST bill number - from"
                         className="check-bill-input-box"
                         type="number"
                         onKeyPress={(event) => {
@@ -72,6 +72,8 @@ const GstBill = () => {
                     trigger={() => <Button variant="info">Save Invoice</Button>}
                     content={() => gstRef.current}
                 />
+
+
 
 
                 {loader &&

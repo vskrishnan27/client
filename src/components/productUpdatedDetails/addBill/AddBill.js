@@ -13,10 +13,10 @@ function AddBill() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   let [formData, setFormData] = useState({
-         invoiceNum : "",
-        shopName:"",
-        shopAddress:"",
-        totalCost:0
+    invoiceNum: "",
+    shopName: "",
+    shopAddress: "",
+    totalCost: 0
   })
   const [dropDownList, setDropDownList] = useState([])
 
@@ -27,12 +27,12 @@ function AddBill() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [Product, SetProduct] = useState([])
-  let [temp,setTemp] = useState({
+  let [temp, setTemp] = useState({
     "name": "",
     "qty": "",
     "cost": ""
   })
-  
+
   let currentData = {};
 
   const dropDownItemClick = (item) => {
@@ -55,36 +55,38 @@ function AddBill() {
   }
 
 
-  const removeInvoice = (ind) =>{
-    let newList = Product.filter((data,index)=>{
-      return (index!=ind)
+  const removeInvoice = (ind) => {
+    let newList = Product.filter((data, index) => {
+      return (index != ind)
     })
     SetProduct(newList)
   }
 
-  const createInvoice = async() =>{
-      setLoading(true)
-      try{
-      await axios.post('http://localhost:5000/invoice/createinvoicebill',{
-        invoiceNum : formData.invoiceNum,
+  const createInvoice = async () => {
+    setLoading(true)
+    try {
+      await axios.post('https://myappget.herokuapp.com/invoice/createinvoicebill', {
+        invoiceNum: formData.invoiceNum,
         shopName: formData.shopName,
-        shopAddress:formData.shopAddress,
-        product:Product,
-        totalCost:formData.totalCost
+        shopAddress: formData.shopAddress,
+        product: Product,
+        totalCost: formData.totalCost
       })
       navigate('/retrivebill')
       setLoading(false)
-    }catch(err){
+    } catch (err) {
       console.log(err)
     }
 
 
-      setLoading(false)
-      console.log({invoiceNum : formData.invoiceNum,
-        shopName: formData.shopName,
-        shopAddress:formData.shopAddress,
-        product:Product,
-        totalCost:formData.totalCost})
+    setLoading(false)
+    console.log({
+      invoiceNum: formData.invoiceNum,
+      shopName: formData.shopName,
+      shopAddress: formData.shopAddress,
+      product: Product,
+      totalCost: formData.totalCost
+    })
 
   }
 
@@ -102,9 +104,9 @@ function AddBill() {
                   placeholder="Invoice Number"
                   aria-label="Invoice Number"
                   aria-describedby="basic-addon1"
-                  onChange={(e)=>{
-                      formData.invoiceNum = e.target.value
-                      console.log(formData.invoiceNum)
+                  onChange={(e) => {
+                    formData.invoiceNum = e.target.value
+                    console.log(formData.invoiceNum)
                   }}
                 />
                 <Form.Control
@@ -112,20 +114,20 @@ function AddBill() {
                   placeholder="Shop Name"
                   aria-label="Shop Name"
                   aria-describedby="basic-addon1"
-                  onChange={(e)=>{
+                  onChange={(e) => {
                     formData.shopName = e.target.value
-                    
-                }}
+
+                  }}
                 />
                 <Form.Control
                   className="invoice-input-text-box mt-5"
                   placeholder="Shop Address"
                   aria-label="Shop Address"
                   aria-describedby="basic-addon1"
-                  onChange={(e)=>{
+                  onChange={(e) => {
                     formData.shopAddress = e.target.value
-                    
-                }}
+
+                  }}
 
                 />
 
@@ -138,7 +140,7 @@ function AddBill() {
                       aria-describedby="basic-addon1"
                       onChange={async (e) => {
                         console.log('hi')
-                        const val = await axios.get(`http://localhost:5000/fetch?val=${e.target.value}`)
+                        const val = await axios.get(`https://myappget.herokuapp.com/fetch?val=${e.target.value}`)
                         setDropDownList(val.data)
                         console.log(dropDownList)
                       }}
@@ -171,12 +173,12 @@ function AddBill() {
                       style={{ backgroundColor: ind % 2 === 0 ? "#f8f9fa" : "#DFDFDF" }}
                     >
                       <tr>
-                        <td>{ind+1}</td>
+                        <td>{ind + 1}</td>
                         <td>{data.name}</td>
                         <td>{data.qty}</td>
                         <td>{data.cost}</td>
                         <td>
-                          <Button variant="danger" onClick={()=>removeInvoice(ind)}>Remove</Button>
+                          <Button variant="danger" onClick={() => removeInvoice(ind)}>Remove</Button>
                         </td>
                       </tr>
                     </tbody>
@@ -188,9 +190,9 @@ function AddBill() {
                   placeholder="Total Cost"
                   aria-label="Total Cost"
                   aria-describedby="basic-addon1"
-                  onChange={(e)=>{
+                  onChange={(e) => {
                     formData.totalCost = e.target.value
-                }}
+                  }}
                 />
 
               </div>
@@ -217,13 +219,13 @@ function AddBill() {
                 className="Product-update-txtbox m-5"
                 placeholder="Enter Stock to add"
                 autoFocus
-                val = {temp.qty}
+                val={temp.qty}
                 onChange={(e) => {
                   if (isNaN(e.target.val)) {
-                    setTemp({ 
+                    setTemp({
                       ...temp,
                       qty: e.target.value
-                    })      
+                    })
                   }
                 }
                 }
@@ -233,12 +235,12 @@ function AddBill() {
                 className="Product-update-txtbox m-5"
                 placeholder="Enter Price"
                 autoFocus
-                val = {temp.cost}
+                val={temp.cost}
                 onChange={(e) => {
                   if (isNaN(e.target.val)) {
                     setTemp({
                       ...temp,
-                      cost:e.target.value
+                      cost: e.target.value
                     })
                   }
                 }

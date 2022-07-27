@@ -14,7 +14,7 @@ const CheckBill = () => {
     try {
       const findbillapi = async () => {
         setload(true)
-        let details = await axios.get("http://localhost:5000/findbill", {
+        let details = await axios.get("https://myappget.herokuapp.com/findbill", {
           params: { billno },
         })
 

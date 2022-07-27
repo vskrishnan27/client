@@ -21,7 +21,7 @@ const StockUpdate = () => {
     try {
       const apicall = async () => {
         setloading(true);
-        const data = await axios.get("http://localhost:5000/list");
+        const data = await axios.get("https://myappget.herokuapp.com/list");
         setList(data.data);
         console.log(data.data);
         setloading(false);
@@ -86,7 +86,9 @@ const StockUpdate = () => {
         const editItem = async () => {
           setloading(true);
           handleClose();
-          await axios.patch("http://localhost:5000/update", { modalData });
+          await axios.patch("https://myappget.herokuapp.com/update", {
+            modalData,
+          });
           setModalData({
             id: 0,
             stock: 0,
@@ -114,7 +116,7 @@ const StockUpdate = () => {
       try {
         const removecall = async () => {
           setloading(true);
-          await axios.post("http://localhost:5000/deleteProduct", {
+          await axios.post("https://myappget.herokuapp.com/deleteProduct", {
             ProductName,
           });
           const tempList = List.filter(
@@ -135,7 +137,7 @@ const StockUpdate = () => {
       {!loading && (
         <Container
           style={{
-            height: "100vh",
+            marginTop: "5%",
             display: "flex",
             alignItems: "center",
           }}
