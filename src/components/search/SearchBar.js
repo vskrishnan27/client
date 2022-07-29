@@ -97,7 +97,7 @@ const SearchBar = ({ productList }) => {
       Rate: currentItem.ProductRetailPrice,
       Quantity: qtydata,
       Cost: currentItem.ProductRetailPrice * qtydata,
-      BalanceStock: currentItem.ProductStock - qtydata,
+      BalanceStock: qtydata,
       Profit: (currentItem.ProductRetailPrice - currentItem.ProductActualPrice) * qtydata,
       GSTPercentage: currentItem.GSTPercentage,
       GSTPrice: currentItem.GSTPrice
@@ -121,16 +121,6 @@ const SearchBar = ({ productList }) => {
   }
 
   const addtosales = async (print) => {
-    // () => {
-    // setUserDetail(
-    //   {
-    //     ...userDetail,
-    //     borrow: totalbill + userDetail.borrow - amount
-    //   })
-    // // setborrowButton(false)
-    // addtosales(true)
-    // }
-
     try {
       setLoader(true)
       const schemaBill = {
@@ -142,7 +132,13 @@ const SearchBar = ({ productList }) => {
         products: bill
       }
 
-      await axios.post('https://myappget.herokuapp.com/updateStocks', { bill })
+      const newBill = {
+        items: [...bill],
+        salesid,
+        reason: "Sales"
+      }
+      console.log(newBill)
+      await axios.post('https://myappget.herokuapp.com/updateStocks', { newBill })
       await axios.post('https://myappget.herokuapp.com/sales', { schemaBill })
 
       setbill([])

@@ -72,6 +72,17 @@ function AddBill() {
         product: Product,
         totalCost: formData.totalCost
       })
+
+      const newBillInvoice = {
+        items: Product,
+        salesid: formData.invoiceNum,
+        reason: formData.shopName
+      }
+
+      await axios.post('https://myappget.herokuapp.com/updateStocks', { newBillInvoice })
+
+
+
       navigate('/retrivebill')
       setLoading(false)
     } catch (err) {
