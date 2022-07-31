@@ -135,7 +135,7 @@ const SearchBar = ({ productList }) => {
       const newBill = {
         items: [...bill],
         salesid,
-        reason: "Sales"
+        reason: 'Sales'
       }
       console.log(newBill)
       await axios.post('https://myappget.herokuapp.com/updateStocks', { newBill })

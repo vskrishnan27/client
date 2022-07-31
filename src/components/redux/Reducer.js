@@ -1,5 +1,5 @@
 
-import { UPDATE_LIST, UPDATE_SALES_ID, UPDATE_TOTAL_COST, UPDATE_USER_DETAIL } from './Actions.js'
+import { UPDATE_LIST, UPDATE_SALES_ID, UPDATE_TOTAL_COST, UPDATE_USER_DETAIL, SET_PRODUCT_LIST } from './Actions.js'
 
 const initialState = {
     billList: [],
@@ -9,7 +9,8 @@ const initialState = {
         "address": "sample",
         "phone": "0000"
     },
-    salesId: 0
+    salesId: 0,
+    ProductList: []
 
 }
 
@@ -35,6 +36,11 @@ export const billListReducer = (state = initialState, action) => {
             return {
                 ...state,
                 salesId: action.payload
+            }
+        case SET_PRODUCT_LIST:
+            return {
+                ...state,
+                ProductList: action.payload
             }
         default:
             return state

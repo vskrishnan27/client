@@ -1,6 +1,11 @@
-.update-product-modal .Product-update-txtbox{
+.update-product-modal .Product-update-txtbox {
     background-color: rgb(226, 226, 226);
-    width:60%;
+    width: 60%;
     margin-left: 30px;
 }
 
+/* body {
+    background-image: url('../../assests/bg-img.jpg');
+    background-attachment: fixed;
+    bac
+} */

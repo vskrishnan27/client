@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom'
-import { Card, ListGroup, Container, Row, Col } from "react-bootstrap";
+import { Card, ListGroup, Container, Row, Col, Button } from "react-bootstrap";
 import axios from "axios";
 import './ProductList.css'
 import Loader from '../Loader'
@@ -13,15 +13,16 @@ const ProductListing = () => {
     const [loading, setloading] = useState(false)
 
     const [List, setList] = useState([])
-
+    const navigate = useNavigate()
     useEffect(() => {
-        const navigate = useNavigate
+
         try {
             const apicall = async () => {
                 setloading(true)
                 const data = await axios.get('https://myappget.herokuapp.com/list')
                 const arr = data.data
                 arr.sort((a, b) => a.ProductStock - b.ProductStock)
+
                 setList(arr)
                 setloading(false)
             }
@@ -31,6 +32,17 @@ const ProductListing = () => {
             console.log(err);
         }
     }, [])
+
+    const handleLogBook = (data) => {
+        // const nav = useNavigate
+        console.log(data)
+        navigate({
+            pathname: "/logbook",
+            search: `?id=${data.ProductId}`
+
+        })
+    }
+
 
     return (
         <>
@@ -49,6 +61,9 @@ const ProductListing = () => {
                                             <ListGroup.Item>Stock : {data.ProductStock}</ListGroup.Item>
                                             <ListGroup.Item>Retail Price : {data.ProductRetailPrice}</ListGroup.Item>
                                             <ListGroup.Item>Actual Price : {data.ProductActualPrice}</ListGroup.Item>
+                                            <ListGroup.Item>GST Price : {data.GSTPrice}</ListGroup.Item>
+                                            <ListGroup.Item>GST Percentage : {data.GSTPercentage}</ListGroup.Item>
+                                            <ListGroup.Item className="d-flex justify-content-around"><Button variant="secondary" onClick={() => handleLogBook(data)}>View Log Book</Button><Button variant="secondary">Edit / Update</Button></ListGroup.Item>
                                         </ListGroup>
 
                                     </Card>

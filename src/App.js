@@ -14,6 +14,7 @@ import BillInvoice from './components/billingInvoice/BillInvoice'
 import GstBill from './components/GstBill/GstBill'
 import { Provider } from 'react-redux'
 import { billListReducer } from './components/redux/Reducer.js'
+import LogBook from './components/logBook/LogBook.js'
 import { createStore } from 'redux'
 function App() {
   const Store = createStore(billListReducer)
@@ -34,6 +35,8 @@ function App() {
             <Route path='/retriveBill' element={<RetriveBill />} />
             <Route path='/billInvoice' element={<BillInvoice />} />
             <Route path='/gstbill' element={<GstBill />} />
+            <Route path='/logbook' element={<LogBook />} />
+
           </Routes>
         </div>
       </BrowserRouter>

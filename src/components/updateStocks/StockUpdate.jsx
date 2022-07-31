@@ -145,6 +145,7 @@ const StockUpdate = () => {
           <Table striped border hover style={{ border: "1px solid black" }}>
             <thead>
               <tr>
+                <th>#</th>
                 <th>Id</th>
                 <th>Name</th>
                 <th>Actual Price</th>
@@ -164,6 +165,7 @@ const StockUpdate = () => {
                 }}
               >
                 <tr>
+                  <td>{ind + 1}</td>
                   <td>{data.ProductId}</td>
                   <td>{data.ProductName}</td>
                   <td>{data.ProductActualPrice}</td>

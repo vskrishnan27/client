@@ -1,32 +1,32 @@
-.check-bill-container{
+.check-bill-container {
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     flex-direction: row;
-    height: 20vh;
+    height: 10vh;
     width: 50vw;
     margin: auto;
-    
-   
-    
 
-    
+
+
+
+
 }
 
-.check-bill-input-box{
-    padding:10px;
-    
+.check-bill-input-box {
+    padding: 10px;
+
 }
 
-.check-bill-btn{
+.check-bill-btn {
     margin: 10px;
     width: 20%;
     border: none;
-    padding:10px;
+    padding: 10px;
 }
 
-.no-result-check-bill{
+.no-result-check-bill {
     text-align: center;
-    
+
 }

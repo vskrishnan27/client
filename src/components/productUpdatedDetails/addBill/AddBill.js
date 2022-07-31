@@ -29,7 +29,7 @@ function AddBill() {
   const [Product, SetProduct] = useState([])
   let [temp, setTemp] = useState({
     "name": "",
-    "qty": "",
+    "qty": 0,
     "cost": ""
   })
 
@@ -73,13 +73,13 @@ function AddBill() {
         totalCost: formData.totalCost
       })
 
-      const newBillInvoice = {
+      const newBill = {
         items: Product,
         salesid: formData.invoiceNum,
         reason: formData.shopName
       }
 
-      await axios.post('https://myappget.herokuapp.com/updateStocks', { newBillInvoice })
+      await axios.post('https://myappget.herokuapp.com/updateStocks', { newBill })
 
 
 
@@ -153,7 +153,7 @@ function AddBill() {
                         console.log('hi')
                         const val = await axios.get(`https://myappget.herokuapp.com/fetch?val=${e.target.value}`)
                         setDropDownList(val.data)
-                        console.log(dropDownList)
+
                       }}
                     />
                     <div className='drop-down-container'>
@@ -233,6 +233,7 @@ function AddBill() {
                 val={temp.qty}
                 onChange={(e) => {
                   if (isNaN(e.target.val)) {
+
                     setTemp({
                       ...temp,
                       qty: e.target.value
