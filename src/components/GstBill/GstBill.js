@@ -110,13 +110,8 @@ const GstBill = () => {
                     <div style={{ margin: "0px 50px" }}>
                         {
                             list.map((data, ind) => (
-
                                 < GstTable data={data} />
-
                             ))
-
-
-
                         }
                     </div>
                     <div className="d-flex justify-content-around m-5 align-items-center" >

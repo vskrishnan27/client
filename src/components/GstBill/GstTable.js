@@ -61,7 +61,7 @@ const GstTable = ({ data }) => {
                             <td style={{ borderRight: "1px solid black" }}>{ind + 1}</td>
                             <td style={{ borderRight: "1px solid black" }}>{item.Name}</td>
                             <td style={{ borderRight: "1px solid black" }}>{item.Quantity}</td>
-                            <td style={{ borderRight: "1px solid black" }} >{item.GSTPrice - (item.GSTPrice * (item.GSTPercentage / 100))}</td>
+                            <td style={{ borderRight: "1px solid black" }} >{item.GSTPrice}</td>
                             <td style={{ borderRight: "1px solid black" }} >{item.Quantity * item.GSTPrice}</td>
                             <td style={{ borderRight: "1px solid black" }} >{item.GSTPercentage / 2}</td>
                             <td style={{ borderRight: "1px solid black" }} >{Math.ceil(((item.GSTPercentage / 2) / 100) * item.GSTPrice)}</td>
