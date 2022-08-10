@@ -27,21 +27,23 @@ const GstTable = ({ data }) => {
                     <th style={{ borderRight: "1px solid black" }}>CGST</th>
                     <th style={{ borderRight: "1px solid black" }}>G.Total</th>
                 </thead>
-                {data.products.map((item, ind) => (
+                < tbody  >
+                    {data.products.map((item, ind) => (
 
-                    < tbody key={ind} >
-                        <td style={{ borderRight: "1px solid black" }}>{ind + 1}</td>
-                        <td style={{ borderRight: "1px solid black" }}>{item.Name}</td>
-                        <td style={{ borderRight: "1px solid black" }}>{item.Quantity}</td>
-                        <td style={{ borderRight: "1px solid black" }} >{item.GSTPrice / item.Quantity}</td>
-                        <td style={{ borderRight: "1px solid black" }} >{item.GSTPrice}</td>
-                        <td style={{ borderRight: "1px solid black" }} >{item.GSTPercentage / 2}</td>
-                        <td style={{ borderRight: "1px solid black" }} >{((item.GSTPercentage / 2) / 100) * item.GSTPrice}</td>
-                        <td style={{ borderRight: "1px solid black" }} >{item.GSTPercentage / 2}</td>
-                        <td style={{ borderRight: "1px solid black" }} >{((item.GSTPercentage / 2) / 100) * item.GSTPrice}</td>
-                        <td style={{ borderRight: "1px solid black" }} >{item.GSTPrice + (item.GSTPrice * (item.GSTPercentage / 100))}</td>
-                    </tbody>
-                ))}
+                        <tr key={ind}>
+                            <td style={{ borderRight: "1px solid black" }}>{ind + 1}</td>
+                            <td style={{ borderRight: "1px solid black" }}>{item.Name}</td>
+                            <td style={{ borderRight: "1px solid black" }}>{item.Quantity}</td>
+                            <td style={{ borderRight: "1px solid black" }} >{Math.ceil(item.GSTPrice / item.Quantity)}</td>
+                            <td style={{ borderRight: "1px solid black" }} >{item.GSTPrice}</td>
+                            <td style={{ borderRight: "1px solid black" }} >{item.GSTPercentage / 2}</td>
+                            <td style={{ borderRight: "1px solid black" }} >{Math.ceil(((item.GSTPercentage / 2) / 100) * item.GSTPrice)}</td>
+                            <td style={{ borderRight: "1px solid black" }} >{item.GSTPercentage / 2}</td>
+                            <td style={{ borderRight: "1px solid black" }} >{Math.ceil(((item.GSTPercentage / 2) / 100) * item.GSTPrice)}</td>
+                            <td style={{ borderRight: "1px solid black" }} >{item.GSTPrice}</td>
+                        </tr>
+                    ))}
+                </tbody>
 
 
 

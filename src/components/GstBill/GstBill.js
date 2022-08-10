@@ -9,15 +9,25 @@ import ReactToPrint from 'react-to-print-advanced';
 
 const GstBill = () => {
     let gstData
-    const [billno, setbillno] = useState('')
+    const [billno, setbillno] = useState({
+        start: "",
+        end: ""
+    })
+    const [total, setTotal] = useState({
+        ProductTotal: 0,
+        cgst: 0,
+        sgst: 0,
+        GTotal: 0,
+    })
     const [list, setList] = useState([]);
     const [loader, setLoader] = useState(false)
     const gstRef = useRef()
 
     const findBill = async () => {
         try {
+
             setLoader(true)
-            const data = await axios.get(`https://myappget.herokuapp.com/gstbill/findGstBill?num=${billno}`)
+            const data = await axios.get(`https://myappget.herokuapp.com/gstbill/findbydates?start=${billno.start}&end=${billno.end}`)
             setList(data.data)
             console.log(data)
             setLoader(false)
@@ -30,21 +40,41 @@ const GstBill = () => {
         <>
             <Container>
                 <div className="check-bill-container">
-                    <Form.Control
-                        aria-label="Text input with radio button"
-                        placeholder="Enter GST bill number - from"
-                        className="check-bill-input-box"
-                        type="number"
-                        onKeyPress={(event) => {
-                            if (event.key === "Enter") {
-                                billno && findBill();
-                            }
-                        }}
-                        value={billno}
-                        onChange={(e) => {
-                            setbillno(e.target.value);
-                        }}
-                    />
+                    <div className="d-flex justify-content-around">
+                        <Form.Control
+                            aria-label="Text input with radio button"
+                            placeholder="Start Date(YYYY-MM-DD)"
+                            className="check-bill-input-box"
+                            style={{ marginRight: "10px" }}
+                            value={billno.start}
+                            onChange={(e) => {
+                                setbillno({
+                                    ...billno,
+                                    start: e.target.value
+                                }
+                                );
+                            }}
+                        />
+                        <Form.Control
+                            aria-label="Text input with radio button"
+                            placeholder="End Date(YYYY-MM-DD)"
+                            className="check-bill-input-box"
+                            onKeyPress={(event) => {
+                                if (event.key === "Enter") {
+                                    billno && findBill();
+                                }
+                            }}
+                            value={billno.end}
+                            onChange={(e) => {
+                                setbillno({
+                                    ...billno,
+                                    end: e.target.value
+                                }
+                                );
+                            }}
+                        />
+
+                    </div>
                     <Button
                         className="check-bill-btn"
                         variant="dark"
@@ -58,15 +88,16 @@ const GstBill = () => {
                     </Button>
                 </div>
 
+                <div ref={gstRef}>
+                    <div style={{ margin: "0px 50px" }}>
+                        {
+                            list.map((data, ind) => (
 
-                <div ref={gstRef} style={{ margin: "0px 50px" }}>
-                    {
-                        list.map((data, ind) => (
-                            <GstTable data={data} gstData={gstData} />
-                        ))
+                                < GstTable data={data} />
 
-                    }
-
+                            ))
+                        }
+                    </div>
                 </div>
                 <ReactToPrint
                     trigger={() => <Button variant="info">Save Invoice</Button>}

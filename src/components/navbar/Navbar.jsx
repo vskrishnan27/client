@@ -18,7 +18,7 @@ const NavbarComponenet = () => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={NavLink} to="biling">
+            <Nav.Link as={NavLink} to="billing">
               Billing
             </Nav.Link>
             <Nav.Link as={NavLink} to="updatestock">

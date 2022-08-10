@@ -25,7 +25,7 @@ function App() {
           <Navbar />
           <Routes>
             <Route path='/' element={<ProductListing />} />
-            <Route path='/biling' element={< SearchBox />} />
+            <Route path='/billing' element={< SearchBox />} />
             <Route path='/addproduct' element={<AddProduct />} />
             <Route path='/sales' element={<Lastsale />} />
             <Route path='/updatestock' element={<StockUpdate />} />
