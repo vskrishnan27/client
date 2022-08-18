@@ -12,6 +12,7 @@ const StockUpdate = () => {
     stock: 0,
     retail: 0,
     actual: 0,
+    gst: 0,
   });
   const [loading, setloading] = useState(false);
 
@@ -45,6 +46,8 @@ const StockUpdate = () => {
       actual: List[ind].ProductActualPrice,
       retail: List[ind].ProductRetailPrice,
       prevRetail: List[ind].ProductRetailPrice,
+      gst: List[ind].GSTPrice,
+      prevgst: List[ind].GSTPrice,
     });
   };
 
@@ -80,6 +83,17 @@ const StockUpdate = () => {
     });
   };
 
+  const updatevalingstmodal = (val) => {
+    let newval = parseInt(modalData.prevgst);
+    console.log(newval);
+    newval = newval + parseInt(val);
+    console.log(newval);
+    setModalData({
+      ...modalData,
+      gst: newval,
+    });
+  };
+
   const editFromList = () => {
     try {
       if (!isNaN(modalData.stock)) {
@@ -92,6 +106,9 @@ const StockUpdate = () => {
           setModalData({
             id: 0,
             stock: 0,
+            retail: 0,
+            actual: 0,
+            gst: 0,
           });
           setloading(false);
 
@@ -270,7 +287,7 @@ const StockUpdate = () => {
               </h5>
               <hr></hr>
               <h5 style={{ margin: "10px" }}>
-                Previous GST Price : {modalData.prevRetail}
+                Previous GST Price : {modalData.prevgst}
               </h5>
               <Form.Control
                 type="number"
@@ -279,12 +296,12 @@ const StockUpdate = () => {
                 autoFocus
                 onChange={(e) => {
                   if (isNaN(e.target.val)) {
-                    updatevalinretailmodal(e.target.value);
+                    updatevalingstmodal(e.target.value);
                   }
                 }}
               />
               <h5 style={{ margin: "10px", color: "green" }}>
-                After GST Price : {modalData.retail}
+                After GST Price : {modalData.gst}
               </h5>
             </Form.Group>
           </Form>
