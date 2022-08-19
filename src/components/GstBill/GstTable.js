@@ -6,25 +6,25 @@ import axios from 'axios'
 const GstTable = ({ data }) => {
 
     let [calc, setCalc] = useState({
-        price: 0,
-        cgst: 0,
-        sgst: 0,
-        gt: 0
+        price: 0.00,
+        cgst: 0.00,
+        sgst: 0.00,
+        gt: 0.00
     })
     useEffect(() => {
         let temp = {
-            price: 0,
-            cgst: 0,
-            sgst: 0,
-            gt: 0
+            price: 0.00,
+            cgst: 0.00,
+            sgst: 0.00,
+            gt: 0.00
         }
         data.products.map((item, ind) => {
             temp = {
                 ...temp,
-                price: temp.price + (item.Quantity * item.GSTPrice),
-                cgst: temp.cgst + Math.ceil(((item.GSTPercentage / 2) / 100) * item.GSTPrice),
-                sgst: temp.sgst + Math.ceil(((item.GSTPercentage / 2) / 100) * item.GSTPrice),
-                gt: temp.gt + Math.ceil((item.Quantity * item.GSTPrice) + (item.Quantity * item.GSTPrice * (item.GSTPercentage / 100)))
+                price: Math.round(temp.price + (item.Quantity * item.GSTPrice)),
+                cgst: Math.round(temp.cgst + Math.ceil(((item.GSTPercentage / 2) / 100) * item.GSTPrice * item.Quantity)),
+                sgst: Math.round(temp.sgst + Math.ceil(((item.GSTPercentage / 2) / 100) * item.GSTPrice * item.Quantity)),
+                gt: Math.round(temp.gt + Math.ceil((item.Quantity * item.GSTPrice) + (item.Quantity * item.GSTPrice * (item.GSTPercentage / 100))))
             }
         })
         setCalc(temp);
@@ -64,9 +64,9 @@ const GstTable = ({ data }) => {
                             <td style={{ borderRight: "1px solid black" }} >{item.GSTPrice}</td>
                             <td style={{ borderRight: "1px solid black" }} >{item.Quantity * item.GSTPrice}</td>
                             <td style={{ borderRight: "1px solid black" }} >{item.GSTPercentage / 2}</td>
-                            <td style={{ borderRight: "1px solid black" }} >{Math.ceil(((item.GSTPercentage / 2) / 100) * item.GSTPrice)}</td>
+                            <td style={{ borderRight: "1px solid black" }} >{Math.ceil(((item.GSTPercentage / 2) / 100) * item.GSTPrice * item.Quantity)}</td>
                             <td style={{ borderRight: "1px solid black" }} >{item.GSTPercentage / 2}</td>
-                            <td style={{ borderRight: "1px solid black" }} >{Math.ceil(((item.GSTPercentage / 2) / 100) * item.GSTPrice)}</td>
+                            <td style={{ borderRight: "1px solid black" }} >{Math.ceil(((item.GSTPercentage / 2) / 100) * item.GSTPrice * item.Quantity)}</td>
                             <td style={{ borderRight: "1px solid black" }} >{Math.ceil((item.Quantity * item.GSTPrice) + (item.Quantity * item.GSTPrice * (item.GSTPercentage / 100)))}</td>
                         </tr>
                     ))}
