@@ -15,9 +15,8 @@ const GstBill = () => {
     })
     const [total, setTotal] = useState({
         ProductTotal: 0,
-        cgst: 0,
-        sgst: 0,
-        GTotal: 0,
+        gst: 0,
+        qty: 0
     })
     const [list, setList] = useState([]);
     const [loader, setLoader] = useState(false)
@@ -29,7 +28,26 @@ const GstBill = () => {
             setLoader(true)
             const data = await axios.get(`https://myappget.herokuapp.com/gstbill/findbydates?start=${billno.start}&end=${billno.end}`)
             setList(data.data)
-            console.log(data)
+            // console.log(data.data)
+            let productGSTCalculations = {
+                ProductTotal: 0,
+                qty: 0,
+                gst: 0
+            }
+            data.data.map((items, ind) => {
+                items.products.map((info, ind) => {
+                    productGSTCalculations = {
+                        ProductTotal: parseFloat(productGSTCalculations.ProductTotal) + parseFloat((info.GSTPrice * info.Quantity)),
+                        qty: parseFloat(productGSTCalculations.qty) + parseFloat(info.Quantity),
+                        gst: parseFloat(productGSTCalculations.gst) + parseFloat(info.Quantity * info.GSTPrice * (info.GSTPercentage / 100)),
+                    }
+                })
+                setTotal({
+                    ...productGSTCalculations,
+
+                })
+                console.log(total)
+            })
             setLoader(false)
         } catch (err) {
             console.log(err)
@@ -96,7 +114,16 @@ const GstBill = () => {
                                 < GstTable data={data} />
 
                             ))
+
+
+
                         }
+                    </div>
+                    <div className="d-flex justify-content-around m-5 align-items-center" >
+                        <p>Total-CGST : &#8377; <b> {(total.gst / 2).toFixed(2)}</b></p>
+                        <p>Total-SGST : &#8377; <b>{(total.gst / 2).toFixed(2)}</b></p>
+                        <p>Total-GST : &#8377; <b>{(total.gst).toFixed(2)}</b></p>
+                        <p>Grant Total : &#8377; <b>{(parseFloat(total.gst) + parseFloat(total.ProductTotal)).toFixed(2)}</b></p>
                     </div>
                 </div>
                 <ReactToPrint
