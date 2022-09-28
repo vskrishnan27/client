@@ -232,7 +232,7 @@ const SearchBar = ({ productList }) => {
               {productData.filter((item) => {
                 const val = item.ProductName.toLowerCase();
                 const search = boxvalue.toLowerCase();
-                return search && val.startsWith(search)
+                return search && val.startsWith(search);
               }
               ).map((item, ind) => (
                 <div className='drop-down-list' onClick={() => {

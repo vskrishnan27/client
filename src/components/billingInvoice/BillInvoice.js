@@ -1,20 +1,29 @@
 
 import React from 'react'
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import ReactToPrint from 'react-to-print-advanced';
 import { Container, Table, Button } from 'react-bootstrap'
 import './BillInvoice.css'
+import { Navigate, useNavigate } from 'react-router-dom';
 
 
 function BillInvoice() {
   const componentRef = useRef();
+  const navigate = useNavigate()
   const billList = useSelector((state) => state.billList)
   const totalCost = useSelector((state) => state.totalCost)
   const userDetail = useSelector((state) => state.userDetail)
   const salesId = useSelector((state) => state.salesId)
   const current = new Date();
   const date = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`;
+
+
+
+  useEffect(() => {
+    document.getElementById("print-btn").click();
+    console.log("called")
+  }, [])
 
   return (
     <>
@@ -160,8 +169,9 @@ function BillInvoice() {
       </div>
 
       <ReactToPrint
-        trigger={() => <Button>Print this out!</Button>}
+        trigger={() => <Button id="print-btn">Print this out!</Button>}
         content={() => componentRef.current}
+        onAfterPrint={() => navigate("/")}
       />
     </>
   )
