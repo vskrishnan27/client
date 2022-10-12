@@ -21,6 +21,9 @@ const NavbarComponenet = () => {
             <Nav.Link as={NavLink} to="billing">
               Billing
             </Nav.Link>
+            <Nav.Link as={NavLink} to="list">
+              List
+            </Nav.Link>
             <Nav.Link as={NavLink} to="updatestock">
               Update Product
             </Nav.Link>

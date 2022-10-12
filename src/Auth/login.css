@@ -1,0 +1,51 @@
+.main {
+
+    height: 95vh;
+    width: 90vw;
+    display: flex;
+    align-items: center;
+
+    justify-content: center;
+
+
+}
+
+.contain {
+    height: fit-content;
+    width: 40vw;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(131, 128, 128);
+    border: solid black 2px;
+    border-radius: 1rem;
+    box-shadow: 3px 3px 3px 3px rgb(221, 221, 221);
+    overflow: hidden;
+}
+
+.contain>input {
+    padding: 1rem;
+    margin: 0.75rem 5rem;
+
+}
+
+.contain>span {
+    color: rgb(255, 255, 255);
+    padding: 1rem;
+    font-size: 1.5rem;
+    display: none;
+}
+
+
+
+.contain>button {
+    margin-top: 2rem;
+    overflow: hidden;
+    background-color: #444;
+    color: white;
+    padding: 0.5rem;
+
+}
+
+.contain>button:hover {
+    background-color: black;
+}

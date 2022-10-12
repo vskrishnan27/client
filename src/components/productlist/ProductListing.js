@@ -1,15 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom'
-import { Card, ListGroup, Container, Row, Col, Button } from "react-bootstrap";
+import { Card, ListGroup, Container, Row, Col, Button, Dropdown } from "react-bootstrap";
+import Table from 'react-bootstrap/Table'
 import axios from "axios";
 import './ProductList.css'
 import Loader from '../Loader'
 import { FerrisWheelSpinnerOverlay } from 'react-spinner-overlay'
+import { useDownloadExcel } from 'react-export-table-to-excel';
+import { MdOutlineEdit } from 'react-icons/md'
+import { TbBooks } from 'react-icons/tb'
+
 
 
 
 const ProductListing = () => {
-
+    const tableRef = useRef(null);
     const [loading, setloading] = useState(false)
 
     const [List, setList] = useState([])
@@ -21,12 +26,11 @@ const ProductListing = () => {
                 setloading(true)
                 const data = await axios.get('https://myappget.herokuapp.com/list')
                 const arr = data.data
-                arr.sort((a, b) => a.ProductStock - b.ProductStock)
-
                 setList(arr)
                 setloading(false)
             }
             apicall();
+
         } catch (err) {
             navigate('/Error500')
             console.log(err);
@@ -43,38 +47,109 @@ const ProductListing = () => {
         })
     }
 
+    const sort = async (type) => {
+        setloading(true)
+
+        let temp = List
+        switch (type) {
+            case "stockZtoA":
+                await temp.sort((a, b) => b.ProductStock - a.ProductStock)
+                break;
+            case "stockAtoZ":
+                await temp.sort((a, b) => a.ProductStock - b.ProductStock)
+                break;
+            case "nameAtoZ":
+                await temp.sort((a, b) => a.ProductName.localeCompare(b.ProductName))
+                break;
+            case "nameZtoA":
+                await temp.sort((a, b) => b.ProductName.localeCompare(a.ProductName))
+                break;
+
+            default:
+                break;
+        }
+        setList(temp)
+        setloading(false)
+    }
+
+    const { onDownload } = useDownloadExcel({
+        currentTableRef: tableRef.current,
+        filename: 'Users table',
+        sheet: 'Users'
+    })
 
     return (
         <>
             {!loading &&
-                <Container>
-                    <Row>
-                        {
-                            List.map((data, ind) => (
-                                <Col md={{ span: 4 }} sm={6} key={ind}>
-                                    <Card style={{ margin: '13px' }} className='product-list-card-style '  >
-                                        {/* <Card.Img variant="top" src="holder.js/100px180?text=Image cap" /> */}
-                                        <Card.Body className="card-title-product-listing" >
-                                            <Card.Title className='product-list-card-title'>{data.ProductName}</Card.Title>
-                                        </Card.Body>
-                                        <ListGroup className="list-group-flush">
-                                            <ListGroup.Item>Stock : {data.ProductStock}</ListGroup.Item>
-                                            <ListGroup.Item>Retail Price : {data.ProductRetailPrice}</ListGroup.Item>
-                                            <ListGroup.Item>Actual Price : {data.ProductActualPrice}</ListGroup.Item>
-                                            <ListGroup.Item>GST Price : {data.GSTPrice}</ListGroup.Item>
-                                            <ListGroup.Item>GST Percentage : {data.GSTPercentage}</ListGroup.Item>
-                                            <ListGroup.Item className="d-flex justify-content-around"><Button variant="secondary" onClick={() => handleLogBook(data)}>View Log Book</Button><Button variant="secondary">Edit / Update</Button></ListGroup.Item>
-                                        </ListGroup>
+                <div id="tableFixHead">
+                    <Container style={{ marginTop: "3rem" }}>
+                        <div >
 
-                                    </Card>
-                                </Col>))
-                        }
-                    </Row>
-                </Container>
+                            <Dropdown style={{ float: "left", marginBottom: "1rem" }}>
+                                <Dropdown.Toggle variant="dark" id="dropdown-basic">
+                                    Sort By
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                    <Dropdown.Item onClick={() => sort("stockAtoZ")}>Stock 0-9</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => sort("stockZtoA")}>Stock 9-0</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => sort("nameAtoZ")}>Name A-Z</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => sort("nameZtoA")}>Name Z-A</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            <Button onClick={onDownload} variant="dark" className="mx-2" style={{ float: "left" }}> Download as excel </Button>
+
+
+
+                        </div>
+                        <Table striped bordered hover id="table-mine" ref={tableRef}>
+                            <thead style={{ cursor: "pointer" }}>
+                                <tr>
+                                    <th>S.NO</th>
+                                    <th onClick={() => sort("nameAtoZ")}>Name</th>
+                                    <th onClick={() => sort("stockAtoZ")}>Stock</th>
+                                    <th>Retail &#8377;</th>
+                                    <th>Actual &#8377;</th>
+                                    <th>GST &#8377;</th>
+                                    <th>GST %</th>
+                                    <th>Log Book</th>
+                                    <th>Edit</th>
+
+
+                                </tr>
+                            </thead>
+
+
+                            <tbody>
+                                {
+                                    List.map((data, ind) => (
+
+                                        <tr>
+                                            <td>{ind + 1}</td>
+                                            <td>{data.ProductName}</td>
+                                            <td>{data.ProductStock}</td>
+                                            <td>{data.ProductRetailPrice}</td>
+                                            <td>{data.ProductActualPrice}</td>
+                                            <td>{data.GSTPrice}</td>
+                                            <td>{data.GSTPercentage}</td>
+                                            <td><Button variant="dark" onClick={() => handleLogBook(data)}><TbBooks /></Button></td>
+                                            <td><Button variant="dark"><MdOutlineEdit /></Button></td>
+                                        </tr>
+
+
+
+                                    ))
+
+                                }
+                            </tbody>
+                        </Table>
+                    </Container>
+                </div >
             }
 
 
-            {loading &&
+            {
+                loading &&
                 <> <FerrisWheelSpinnerOverlay loading size={100} color="#FF7626" /> </>
             }
 

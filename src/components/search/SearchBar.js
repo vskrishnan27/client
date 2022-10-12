@@ -340,12 +340,13 @@ const SearchBar = ({ productList }) => {
                           setAmount(e.target.value)
                         }
                       }}
+                      value={amount}
                     />
                   </Form>
 
 
 
-                  <p> Balance(with borrow) : {totalbill + userDetail.borrow - amount}</p>
+                  <p> Balance: {amount - totalbill}</p>
 
 
 
