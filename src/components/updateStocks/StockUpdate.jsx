@@ -124,31 +124,6 @@ const StockUpdate = () => {
     }
   };
 
-  const removeFromList = (ProductName) => {
-    if (
-      window.confirm(
-        `Do you want to remove the ${ProductName} product from the market?`
-      )
-    ) {
-      try {
-        const removecall = async () => {
-          setloading(true);
-          await axios.post("https://myappget.herokuapp.com/deleteProduct", {
-            ProductName,
-          });
-          const tempList = List.filter(
-            (info) => info.ProductName != ProductName
-          );
-          setList(tempList);
-          setloading(false);
-        };
-        removecall();
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
-
   return (
     <>
       {!loading && (
@@ -172,7 +147,6 @@ const StockUpdate = () => {
                 <th>Stock</th>
 
                 <th>Edit</th>
-                <th>Remove</th>
               </tr>
             </thead>
             {List.map((data, ind) => (
@@ -196,16 +170,6 @@ const StockUpdate = () => {
                       onClick={() => handleShow(data.ProductId, ind)}
                     >
                       Edit
-                    </Button>
-                  </td>
-                  <td>
-                    <Button
-                      variant="danger"
-                      onClick={() => {
-                        removeFromList(data.ProductName);
-                      }}
-                    >
-                      Remove
                     </Button>
                   </td>
                 </tr>

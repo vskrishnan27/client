@@ -18,9 +18,36 @@ import LogBook from './components/logBook/LogBook.js'
 import Login from './Auth/Login'
 import Logo from './components/logo/Logo'
 import { createStore } from 'redux'
+import { ImFileMusic } from 'react-icons/im';
 
 function App() {
   const Store = createStore(billListReducer)
+
+
+
+  const checkAuth = () => {
+    let x = document.cookie
+    try {
+      let cookie = x.split(";")
+      console.log(cookie)
+      if (cookie.length == 0) return false;
+      else {
+        let dateNow = new Date().getDate();
+        if (cookie[1].split("=")[1] == dateNow) {
+          return true;
+        }
+      }
+    } catch (error) {
+      console.log("auth Eror - >" + error)
+      return false;
+    }
+
+
+    return false;
+  }
+
+  let isAuth = checkAuth();
+
 
 
   return (
@@ -28,9 +55,9 @@ function App() {
     <Provider store={Store}>
       <BrowserRouter>
         <div className="App">
-          <Navbar />
+          {isAuth && <Navbar />}
           <Routes>
-            <Route path='/' element={<Logo />} />
+            <Route path='/' element={isAuth ? <Logo /> : <Login />} />
             <Route path='/list' element={<ProductListing />} />
             <Route path='/billing' element={< SearchBox />} />
 

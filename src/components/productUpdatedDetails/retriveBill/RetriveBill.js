@@ -8,12 +8,25 @@ import { FerrisWheelSpinnerOverlay } from "react-spinner-overlay";
 const RetriveBill = () => {
   const [billno, setbillno] = useState('')
   const [list, setList] = useState();
+  const [Err, setErr] = useState();
 
   const findBill = async () => {
     try {
       const data = await axios.get(`https://myappget.herokuapp.com/invoice/viewInvoice?invoiceNum=${billno}`)
       console.log(data.data[0])
       setList(data.data[0])
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const handleDeleteBill = async () => {
+    try {
+      let v = await axios.delete(`https://myappget.herokuapp.com/invoice/deleteInvoice?invoiceNum=${billno}`)
+
+      setErr(v)
+      setList(null)
+
     } catch (err) {
       console.log(err)
     }
@@ -89,13 +102,14 @@ const RetriveBill = () => {
               </Table>
             }
             <p>Total cost : <b>{list.totalCost}</b></p>
+            <Button variant="danger" onClick={handleDeleteBill}>Delete Bill</Button>
           </div>
 
 
         </>
           :
           <>
-            <h4><b>No Results Found</b></h4>
+            {Err ? <h4>{Err}</h4> : <h4>No Results Found</h4>}
           </>
         }
       </div>

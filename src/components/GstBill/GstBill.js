@@ -22,6 +22,7 @@ const GstBill = () => {
     const [loader, setLoader] = useState(false)
     const gstRef = useRef()
 
+
     const findBill = async () => {
         try {
             setLoader(true)
@@ -58,7 +59,9 @@ const GstBill = () => {
             <Container cl>
                 <div className="check-bill-container">
                     <div className="d-flex justify-content-around">
+
                         <Form.Control
+                            type="date"
                             aria-label="Text input with radio button"
                             placeholder="Start Date(YYYY-MM-DD)"
                             className="check-bill-input-box"
@@ -73,6 +76,7 @@ const GstBill = () => {
                             }}
                         />
                         <Form.Control
+                            type="date"
                             aria-label="Text input with radio button"
                             placeholder="End Date(YYYY-MM-DD)"
                             className="check-bill-input-box"
@@ -104,26 +108,29 @@ const GstBill = () => {
                         <HiDocumentSearch />
                     </Button>
                 </div>
+                {list.length > 0 && <main>
+                    <div ref={gstRef}>
+                        <div style={{ margin: "0px 50px" }}>
+                            {
+                                list.map((data, ind) => (
+                                    < GstTable data={data} />
+                                ))
+                            }
+                        </div>
+                        <div className="d-flex justify-content-around m-1 align-items-center flex-wrap text-center" >
+                            <p className="p-3">Total-CGST : &#8377; <b> {(total.gst / 2).toFixed(2)}</b></p>
+                            <p className="p-3">Total-SGST : &#8377; <b>{(total.gst / 2).toFixed(2)}</b></p>
+                            <p className="p-3">Total-GST : &#8377; <b>{(total.gst).toFixed(2)}</b></p>
+                            <p className="p-3">Grant Total : &#8377; <b>{(parseFloat(total.gst) + parseFloat(total.ProductTotal)).toFixed(2)}</b></p>
+                        </div>
+                    </div>
+                    <ReactToPrint
+                        trigger={() => <Button variant="info" >Save Invoice</Button>}
+                        content={() => gstRef.current}
 
-                <div ref={gstRef}>
-                    <div style={{ margin: "0px 50px" }}>
-                        {
-                            list.map((data, ind) => (
-                                < GstTable data={data} />
-                            ))
-                        }
-                    </div>
-                    <div className="d-flex justify-content-around m-1 align-items-center flex-wrap text-center" >
-                        <p className="p-3">Total-CGST : &#8377; <b> {(total.gst / 2).toFixed(2)}</b></p>
-                        <p className="p-3">Total-SGST : &#8377; <b>{(total.gst / 2).toFixed(2)}</b></p>
-                        <p className="p-3">Total-GST : &#8377; <b>{(total.gst).toFixed(2)}</b></p>
-                        <p className="p-3">Grant Total : &#8377; <b>{(parseFloat(total.gst) + parseFloat(total.ProductTotal)).toFixed(2)}</b></p>
-                    </div>
-                </div>
-                <ReactToPrint
-                    trigger={() => <Button variant="info">Save Invoice</Button>}
-                    content={() => gstRef.current}
-                />
+                    />
+                </main>
+                }
 
 
 

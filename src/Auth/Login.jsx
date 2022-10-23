@@ -8,9 +8,13 @@ function login() {
     const data = new FormData(e.target);
     const res = Object.fromEntries(data.entries());
     if (res.username == "kvs" && res.password == "kvsagro") {
+      document.cookie = `isLogin=true;`;
+      document.cookie = `date=${new Date().getDate()};`;
+      window.location.reload();
       console.log("logged in");
     } else {
       console.log("invalid input");
+
       document.getElementById("invalidInput").style.display = "block";
     }
   };
@@ -22,7 +26,9 @@ function login() {
         <input name="username" type="text" placeholder="UserName..?" />
         <input name="password" type="password" placeholder="Password..?" />
         {/* <Button variant="dark">Login</Button> */}
-        <span id="invalidInput">Invalid input!!!</span>
+        <span id="invalidInput" style={{ color: "red", fontSize: "1rem" }}>
+          Invalid input!!!
+        </span>
         <button>Login</button>
       </form>
     </div>

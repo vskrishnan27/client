@@ -7,8 +7,9 @@ import './ProductList.css'
 import Loader from '../Loader'
 import { FerrisWheelSpinnerOverlay } from 'react-spinner-overlay'
 import { useDownloadExcel } from 'react-export-table-to-excel';
-import { MdOutlineEdit } from 'react-icons/md'
+import { MdOutlineEdit, MdDeleteSweep, MdDeleteForever } from 'react-icons/md'
 import { TbBooks } from 'react-icons/tb'
+import { removeFromList } from "./ProductListMethod";
 
 
 
@@ -106,6 +107,7 @@ const ProductListing = () => {
                             <thead style={{ cursor: "pointer" }}>
                                 <tr>
                                     <th>S.NO</th>
+                                    <th>P.ID</th>
                                     <th onClick={() => sort("nameAtoZ")}>Name</th>
                                     <th onClick={() => sort("stockAtoZ")}>Stock</th>
                                     <th>Retail &#8377;</th>
@@ -114,6 +116,8 @@ const ProductListing = () => {
                                     <th>GST %</th>
                                     <th>Log Book</th>
                                     <th>Edit</th>
+                                    <th>Remove</th>
+
 
 
                                 </tr>
@@ -123,9 +127,9 @@ const ProductListing = () => {
                             <tbody>
                                 {
                                     List.map((data, ind) => (
-
                                         <tr>
                                             <td>{ind + 1}</td>
+                                            <td>{data.ProductId}</td>
                                             <td>{data.ProductName}</td>
                                             <td>{data.ProductStock}</td>
                                             <td>{data.ProductRetailPrice}</td>
@@ -134,6 +138,7 @@ const ProductListing = () => {
                                             <td>{data.GSTPercentage}</td>
                                             <td><Button variant="dark" onClick={() => handleLogBook(data)}><TbBooks /></Button></td>
                                             <td><Button variant="dark"><MdOutlineEdit /></Button></td>
+                                            <td><Button style={{ borderRadius: "50%" }} variant="danger" onClick={() => removeFromList(data.ProductName, setloading, setList, List)}><MdDeleteForever /></Button></td>
                                         </tr>
 
 

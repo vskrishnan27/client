@@ -60,7 +60,7 @@ const AddProduct = () => {
         }
     }
 
-
+    let isAddProductDataValid = (data.ProductName.length > 3 && data.ProductActualPrice > 0 && data.ProductRetailPrice > 0 && data.ProductStock > 0 && data.GSTPercentage > 0 && data.GSTPrice > 0)
     return (
         <>
             {!loader && <Col md={{ span: 6, offset: 3 }}>
@@ -73,6 +73,7 @@ const AddProduct = () => {
                             aria-label="Product ID"
                             aria-describedby="basic-addon1"
                             value={data.ProductId}
+
                         />
                         <Form.Control
                             className="input-text-box mt-5"
@@ -83,6 +84,7 @@ const AddProduct = () => {
                             onChange={(e) => {
                                 setData({ ...data, ProductName: e.target.value });
                             }}
+                            style={{ border: data.ProductName.length > 1 ? "1.5px solid green" : "1.5px solid red" }}
                         />
                         <Form.Control
                             className="input-text-box mt-5"
@@ -93,6 +95,7 @@ const AddProduct = () => {
                             onChange={(e) => {
                                 setData({ ...data, ProductRetailPrice: e.target.value });
                             }}
+                            style={{ border: data.ProductRetailPrice > 0 ? "1.5px solid green" : "1.5px solid red" }}
                         />
                         <Form.Control
                             className="input-text-box mt-5"
@@ -104,6 +107,8 @@ const AddProduct = () => {
                                 setData({ ...data, ProductActualPrice: e.target.value });
                                 console.log()
                             }}
+                            style={{ border: data.ProductActualPrice > 0 ? "1.5px solid green" : "1.5px solid red" }}
+
                         />
                         <Form.Control
                             className="input-text-box mt-5"
@@ -115,6 +120,8 @@ const AddProduct = () => {
                                 setData({ ...data, ProductStock: e.target.value });
                                 console.log()
                             }}
+                            style={{ border: data.ProductStock > 0 ? "1.5px solid green" : "1.5px solid red" }}
+
                         />
                         <Form.Control
                             className="input-text-box mt-5"
@@ -126,6 +133,8 @@ const AddProduct = () => {
                                 setData({ ...data, GSTPercentage: e.target.value });
                                 console.log()
                             }}
+                            style={{ border: data.GSTPercentage > 0 ? "1.5px solid green" : "1.5px solid red" }}
+
                         />
                         <Form.Control
                             className="input-text-box mt-5"
@@ -137,8 +146,10 @@ const AddProduct = () => {
                                 setData({ ...data, GSTPrice: e.target.value });
                                 console.log()
                             }}
+                            style={{ border: data.GSTPrice > 0 ? "1.5px solid green" : "1.5px solid red" }}
+
                         />
-                        <Button variant='dark' className='add-product-btn' onClick={() => addDetail()}>Add Product to Market</Button>
+                        <Button variant={isAddProductDataValid ? "success" : "danger"} className='add-product-btn' onClick={() => addDetail()} disabled={!isAddProductDataValid}>Add Product to Market</Button>
                     </div>
                 </Container>
             </Col>

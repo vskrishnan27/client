@@ -19,7 +19,7 @@ const SearchBar = ({ productList }) => {
 
 
   const Navigate = useNavigate()
-
+  let isUserValueIsValid = false;
   const [loader, setLoader] = useState(false)
   const [bill, setbill] = useState([])
   const [qtydata, setqtydata] = useState(1)
@@ -87,6 +87,11 @@ const SearchBar = ({ productList }) => {
 
     setLoader(false)
   }
+
+  isUserValueIsValid = (userDetail.name.length >= 3 && userDetail.address.length >= 3 && userDetail.phone.length == 10)
+
+
+
 
   const handleClose = () => {
     setShow(false);
@@ -232,7 +237,7 @@ const SearchBar = ({ productList }) => {
               {productData.filter((item) => {
                 const val = item.ProductName.toLowerCase();
                 const search = boxvalue.toLowerCase();
-                return search && val.startsWith(search);
+                return search && val.includes(search);
               }
               ).map((item, ind) => (
                 <div className='drop-down-list' onClick={() => {
@@ -282,7 +287,6 @@ const SearchBar = ({ productList }) => {
               <>
                 {
                   <>
-
                     <div >
                       <Table hover className="table-container" >
                         <thead>
@@ -343,13 +347,7 @@ const SearchBar = ({ productList }) => {
                       value={amount}
                     />
                   </Form>
-
-
-
                   <p> Balance: {amount - totalbill}</p>
-
-
-
                 </div>
                 <div >
                   <Button variant="dark" className="sales-btn p-2" onClick={() => addtosales(true)}>Add to sales & Print Bill</Button>
@@ -358,7 +356,6 @@ const SearchBar = ({ productList }) => {
 
             )
             }
-
           </Container>
         </>
       }
@@ -367,8 +364,6 @@ const SearchBar = ({ productList }) => {
         loader &&
         <> <FerrisWheelSpinnerOverlay loading size={100} color="#FF7626" /> </>
       }
-
-
       <>
         <Modal show={userDetailModal} onHide={handleUserDetailClose}>
           <Modal.Header closeButton>
@@ -418,7 +413,7 @@ const SearchBar = ({ productList }) => {
             <Button variant="secondary" onClick={handleUserDetailClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={handleStoreUserDetailModal}>
+            <Button variant={isUserValueIsValid ? "success" : "danger"} onClick={handleStoreUserDetailModal} disabled={!isUserValueIsValid} >
               Save Changes
             </Button>
           </Modal.Footer>
