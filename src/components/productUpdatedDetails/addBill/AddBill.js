@@ -65,7 +65,7 @@ function AddBill() {
   const createInvoice = async () => {
     setLoading(true)
     try {
-      await axios.post('https://myappget.herokuapp.com/invoice/createinvoicebill', {
+      await axios.post('/invoice/createinvoicebill', {
         invoiceNum: formData.invoiceNum,
         shopName: formData.shopName,
         shopAddress: formData.shopAddress,
@@ -79,7 +79,7 @@ function AddBill() {
         reason: formData.shopName
       }
 
-      await axios.post('https://myappget.herokuapp.com/updateStocks', { newBill })
+      await axios.post('/updateStocks', { newBill })
 
 
 
@@ -151,7 +151,7 @@ function AddBill() {
                       aria-describedby="basic-addon1"
                       onChange={async (e) => {
                         console.log('hi')
-                        const val = await axios.get(`https://myappget.herokuapp.com/fetch?val=${e.target.value}`)
+                        const val = await axios.get(`/fetch?val=${e.target.value}`)
                         setDropDownList(val.data)
 
                       }}

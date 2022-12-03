@@ -11,7 +11,7 @@ const Lastsale = () => {
         try {
             const callapi = async () => {
                 setLoader(true)
-                // const data = await axios.get('https://myappget.herokuapp.com/lastsale')
+                // const data = await axios.get('/lastsale')
                 // setSalesList(data.data)
 
                 setLoader(false)

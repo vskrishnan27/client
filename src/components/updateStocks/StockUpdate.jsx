@@ -22,7 +22,7 @@ const StockUpdate = () => {
     try {
       const apicall = async () => {
         setloading(true);
-        const data = await axios.get("https://myappget.herokuapp.com/list");
+        const data = await axios.get("/list");
         setList(data.data);
         console.log(data.data);
         setloading(false);
@@ -100,7 +100,7 @@ const StockUpdate = () => {
         const editItem = async () => {
           setloading(true);
           handleClose();
-          await axios.patch("https://myappget.herokuapp.com/update", {
+          await axios.patch("/update", {
             modalData,
           });
           setModalData({

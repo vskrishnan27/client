@@ -18,12 +18,12 @@ const CheckBill = () => {
         let details;
 
         if (radio == "billno") {
-          details = await axios.get("https://myappget.herokuapp.com/findbill", {
+          details = await axios.get("/findbill", {
             params: { billno },
           })
 
         } else {
-          details = await axios.get("https://myappget.herokuapp.com/findbillbyname", {
+          details = await axios.get("/findbillbyname", {
             params: { billno },
           })
         }

@@ -44,9 +44,9 @@ const SearchBar = ({ productList }) => {
     const dataapi = async () => {
       try {
         setLoader(true)
-        const info = await axios.get('https://myappget.herokuapp.com/list')
+        const info = await axios.get('/list')
         setProductData(info.data)
-        const Id = await axios.get('https://myappget.herokuapp.com/lastsale')
+        const Id = await axios.get('/lastsale')
         setsalesid(Id.data[0].salesid + 1)
         setLoader(false)
       } catch (err) {
@@ -64,7 +64,7 @@ const SearchBar = ({ productList }) => {
   const handleStoreUserDetailModal = async () => {
     setUserDetailModal(false)
     setLoader(true)
-    var data = await axios.get(`https://myappget.herokuapp.com/borrow?phone=${userDetail.phone}`)
+    var data = await axios.get(`/borrow?phone=${userDetail.phone}`)
 
     console.log(data)
     if (!data.data || data.data.length == 0) {
@@ -143,8 +143,8 @@ const SearchBar = ({ productList }) => {
         reason: 'Sales'
       }
       console.log(newBill)
-      await axios.post('https://myappget.herokuapp.com/updateStocks', { newBill })
-      await axios.post('https://myappget.herokuapp.com/sales', { schemaBill })
+      await axios.post('/updateStocks', { newBill })
+      await axios.post('/sales', { schemaBill })
 
       setbill([])
       settotalbill(0)

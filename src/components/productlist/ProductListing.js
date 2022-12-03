@@ -25,7 +25,7 @@ const ProductListing = () => {
         try {
             const apicall = async () => {
                 setloading(true)
-                const data = await axios.get('https://myappget.herokuapp.com/list')
+                const data = await axios.get('/list')
                 const arr = data.data
                 setList(arr)
                 setloading(false)
