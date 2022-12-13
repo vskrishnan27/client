@@ -1,7 +1,25 @@
 import React from "react";
 import "./login.css";
 import { Button } from "react-bootstrap";
+import { useState } from "react";
+
 function Login() {
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = () => {
+    console.log("logincheck");
+    if (userName == "kvs" && password == "kvsagro") {
+      document.cookie = `isLogin=true;`;
+      document.cookie = `date=${new Date().getDate()};`;
+      window.location.reload();
+      console.log("logged in");
+    } else {
+      console.log("invalid input");
+      // document.getElementById("invalidInput").style.display = "block";
+    }
+  };
+
   return (
     <div className="container-login">
       <div className="card">
@@ -33,9 +51,26 @@ function Login() {
             <hr />
             <div className="sign-in-container">
               <h6>Sign into your account </h6>
-              <input type="email" placeholder="Email address" />
-              <input type="password" placeholder="Password" />
-              <Button variant="secondary">Login</Button>
+              <input
+                type="email"
+                placeholder="Email address"
+                value={userName}
+                onChange={(e) => {
+                  setUserName(e.target.value);
+                }}
+              />
+
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
+              <Button variant="secondary" onClick={handleLogin}>
+                Login
+              </Button>
               <button
                 id="forgot-password"
                 onClick={() => console.log("forgot")}

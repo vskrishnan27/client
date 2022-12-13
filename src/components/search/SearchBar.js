@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Form, InputGroup, Button, Modal, Container, Spinner } from "react-bootstrap";
 import "./SearchBar.css";
 import { ImCool2, ImSearch } from "react-icons/im";
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import Table from 'react-bootstrap/Table'
 import { useNavigate } from "react-router-dom";
@@ -38,6 +38,7 @@ const SearchBar = ({ productList }) => {
   const [productData, setProductData] = useState([])
   const [amount, setAmount] = useState(0)
   const [borrowButton, setborrowButton] = useState(true)
+  const srchRef = useRef(null)
 
   useEffect(() => {
 
@@ -49,12 +50,21 @@ const SearchBar = ({ productList }) => {
         const Id = await axios.get('/lastsale')
         setsalesid(Id.data[0].salesid + 1)
         setLoader(false)
+
+        document.getElementById("buyer-name").focus()
+
       } catch (err) {
         console.log(err)
       }
     }
     dataapi()
   }, [])
+
+  // used to make focus in the search bar after gettign user detail modal
+  useEffect(() => {
+    !userDetailModal && srchRef.current && srchRef.current.focus()
+  }, [userDetail])
+
 
   const handleUserDetailClose = () => {
     setUserDetailModal(false)
@@ -85,7 +95,10 @@ const SearchBar = ({ productList }) => {
 
     dispatch(updateUserDetail(userDetail))
 
+
     setLoader(false)
+
+
   }
 
   isUserValueIsValid = (userDetail.name.length >= 3 && userDetail.address.length >= 3 && userDetail.phone.length == 10)
@@ -184,17 +197,22 @@ const SearchBar = ({ productList }) => {
     setbill(newList)
     settotalbill(totalbill - totalcost)
   }
+  const [cursor, setCursor] = useState(0)
+  const handleKeyDown = (e) => {
 
-
+    if (e.keyCode === 38 && cursor > 0) {
+      console.log("up clicked")
+      setCursor(Number(cursor) - 1)
+    } else if (e.keyCode === 40) {
+      setCursor(Number(cursor) + 1)
+      console.log("down clicked" + cursor)
+    } else if (e.keyCode === 13) {
+      document.getElementsByClassName("drop-down-list-active")[0].click()
+    }
+  }
 
   return (
-
-
     <>
-
-
-
-
       {!loader &&
         <>
           <Container>
@@ -205,8 +223,6 @@ const SearchBar = ({ productList }) => {
               <p>Borrow : <mark>{userDetail.borrow}</mark></p>
             </div>
           </Container>
-
-
           <div className="search-box">
             <InputGroup className="search-box-input-1">
               <Form.Control
@@ -214,11 +230,24 @@ const SearchBar = ({ productList }) => {
                 placeholder="Search Product"
                 aria-label="Search Product"
                 aria-describedby="basic-addon1"
+                id="srch"
+                ref={srchRef}
                 value={boxvalue}
                 onChange={(e) => {
                   setboxvalue(e.target.value);
-
                 }}
+                onKeyDown={(e) => {
+                  if (e.shiftKey && e.key == "p" || e.key == "P") {
+                    console.log("shift + p is pressed")
+                    addtosales(true)
+
+                  } else {
+                    handleKeyDown(e)
+                  }
+
+                }
+                }
+
               />
               <Button
                 className="search-input-btn"
@@ -240,9 +269,9 @@ const SearchBar = ({ productList }) => {
                 return search && val.includes(search);
               }
               ).map((item, ind) => (
-                <div className='drop-down-list' onClick={() => {
+                <div className={ind == cursor ? "drop-down-list-active" : 'drop-down-list'} onClick={() => {
                   dothisclickaction(item, ind)
-                }} key={ind}>
+                }} key={ind} >
                   <p>{item.ProductName}</p>
                 </div>
               )).slice(0, 10)
@@ -263,11 +292,19 @@ const SearchBar = ({ productList }) => {
                 aria-describedby="basic-addon1"
                 value={qtydata}
                 onChange={(e) => {
+
                   if (!isNaN(e.target.value)) {
                     setqtydata(e.target.value)
                   }
                 }
                 }
+                autoFocus
+                onKeyDown={(e) => {
+                  e.key == "Enter" && handleClose()
+                  e.key == "Escape" && handlecancel()
+
+                }}
+
               />
               <h5 className="mt-3">Total-Cost : {(currentItem.ProductRetailPrice * qtydata)}</h5>
               <h5 className="mt-3" style={{ color: (currentItem.ProductStock - qtydata) >= 0 ? "black" : "red" }}>Balance Stock : {(currentItem.ProductStock - qtydata)}</h5>
@@ -370,9 +407,10 @@ const SearchBar = ({ productList }) => {
             <Modal.Title>Buyer Details</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
+            <Form onSubmit={handleStoreUserDetailModal}>
               <Form.Group>
                 <Form.Control type='text'
+                  id="buyer-name"
                   placeholder='Enter Buyer Name'
                   className="mt-3"
                   style={{ boxShadow: '0 5px 5px rgb(0,0,0,0.1)' }}
@@ -382,6 +420,7 @@ const SearchBar = ({ productList }) => {
                       name: e.target.value
                     }
                   )}
+                  autoFocus
                 />
                 <Form.Control
                   type='text'
@@ -397,12 +436,14 @@ const SearchBar = ({ productList }) => {
                 />
                 <Form.Control type='number' placeholder='Enter Buyer Phone Number' className="mt-3"
                   style={{ boxShadow: '0 5px 5px rgb(0,0,0,0.1)' }}
-                  onChange={(e) => setUserDetail(
-                    {
-                      ...userDetail,
-                      phone: e.target.value
-                    }
-                  )}
+                  onChange={(e) =>
+                    setUserDetail(
+                      {
+                        ...userDetail,
+                        phone: e.target.value
+                      }
+                    )}
+                  onKeyDown={(e) => e.key == "Enter" && handleStoreUserDetailModal()}
                 />
               </Form.Group>
             </Form>
