@@ -56,7 +56,7 @@ const CheckBill = () => {
         <div style={{ marginTop: "10px" }}>
           <input type="radio" name="gender" value="billno" style={{ marginRight: "10px" }}
             onChange={(e) => setRadio(e.target.value)}
-
+            checked
           />
           Search by Bill Number
           <input type="radio" name="gender" value="name" style={{ margin: "0px 10px" }}
@@ -79,6 +79,7 @@ const CheckBill = () => {
             onChange={(e) => {
               setbillno(e.target.value);
             }}
+            autoFocus
           />
           <Button
             className="check-bill-btn"
