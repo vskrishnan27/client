@@ -5,7 +5,9 @@ import App from './App';
 import axios from 'axios';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-axios.defaults.baseURL = "https://kvs-backend.onrender.com/"
+axios.defaults.baseURL = "http://ec2-15-206-116-6.ap-south-1.compute.amazonaws.com/server/"
+
+
 
 root.render(
   <React.StrictMode>
