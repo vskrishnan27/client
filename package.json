@@ -52,6 +52,5 @@
   },
   "devDependencies": {
     "react-to-print-advanced": "^2.1.2"
-  },
-  "proxy": "https://kvs-backend.onrender.com"
+  }
 }
