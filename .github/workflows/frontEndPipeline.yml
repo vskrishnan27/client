@@ -25,6 +25,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-      - run: npm ci
+        # - run: npm ci
+        run: rm -rf node_modules/
+      - run: npm install --production
       - run: npm run build
       - run: sudo systemctl restart nginx
