@@ -22,7 +22,7 @@ const StockUpdate = () => {
     try {
       const apicall = async () => {
         setloading(true);
-        const data = await axios.get("/list");
+        const data = await axios.get("server/list");
         setList(data.data);
         console.log(data.data);
         setloading(false);
@@ -100,7 +100,7 @@ const StockUpdate = () => {
         const editItem = async () => {
           setloading(true);
           handleClose();
-          await axios.patch("/update", {
+          await axios.patch("server/update", {
             modalData,
           });
           setModalData({

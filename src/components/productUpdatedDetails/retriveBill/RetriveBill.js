@@ -12,7 +12,7 @@ const RetriveBill = () => {
 
   const findBill = async () => {
     try {
-      const data = await axios.get(`/invoice/viewInvoice?invoiceNum=${billno}`)
+      const data = await axios.get(`server/invoice/viewInvoice?invoiceNum=${billno}`)
       console.log(data.data[0])
       setList(data.data[0])
     } catch (err) {
@@ -22,7 +22,7 @@ const RetriveBill = () => {
 
   const handleDeleteBill = async () => {
     try {
-      let v = await axios.delete(`/invoice/deleteInvoice?invoiceNum=${billno}`)
+      let v = await axios.delete(`server/invoice/deleteInvoice?invoiceNum=${billno}`)
 
       setErr(v)
       setList(null)

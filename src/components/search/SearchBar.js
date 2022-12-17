@@ -45,9 +45,9 @@ const SearchBar = ({ productList }) => {
     const dataapi = async () => {
       try {
         setLoader(true)
-        const info = await axios.get('/list')
+        const info = await axios.get('server/list')
         setProductData(info.data)
-        const Id = await axios.get('/lastsale')
+        const Id = await axios.get('server/lastsale')
         setsalesid(Id.data[0].salesid + 1)
         setLoader(false)
 
@@ -74,7 +74,7 @@ const SearchBar = ({ productList }) => {
   const handleStoreUserDetailModal = async () => {
     setUserDetailModal(false)
     setLoader(true)
-    var data = await axios.get(`/borrow?phone=${userDetail.phone}`)
+    var data = await axios.get(`server/borrow?phone=${userDetail.phone}`)
 
     console.log(data)
     if (!data.data || data.data.length == 0) {
@@ -156,8 +156,8 @@ const SearchBar = ({ productList }) => {
         reason: 'Sales'
       }
       console.log(newBill)
-      await axios.post('/updateStocks', { newBill })
-      await axios.post('/sales', { schemaBill })
+      await axios.post('server/updateStocks', { newBill })
+      await axios.post('server/sales', { schemaBill })
 
       setbill([])
       settotalbill(0)

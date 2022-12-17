@@ -9,7 +9,7 @@ export const removeFromList = (ProductName, setloading, setList, List) => {
         try {
             const removecall = async () => {
                 setloading(true);
-                await axios.post("/deleteProduct", {
+                await axios.post("server/deleteProduct", {
                     ProductName,
                 });
                 const tempList = List.filter(

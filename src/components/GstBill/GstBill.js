@@ -26,7 +26,7 @@ const GstBill = () => {
     const findBill = async () => {
         try {
             setLoader(true)
-            const data = await axios.get(`/gstbill/findbydates?start=${billno.start}&end=${billno.end}`)
+            const data = await axios.get(`server/gstbill/findbydates?start=${billno.start}&end=${billno.end}`)
             setList(data.data)
             // console.log(data.data)
             let productGSTCalculations = {

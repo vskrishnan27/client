@@ -18,12 +18,12 @@ const CheckBill = () => {
         let details;
 
         if (radio == "billno") {
-          details = await axios.get("/findbill", {
+          details = await axios.get("server/findbill", {
             params: { billno },
           })
 
         } else {
-          details = await axios.get("/findbillbyname", {
+          details = await axios.get("server/findbillbyname", {
             params: { billno },
           })
         }

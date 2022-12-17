@@ -17,7 +17,7 @@ const LogBook = () => {
         try {
             const apicall = async () => {
                 setloading(true)
-                const data = await axios.get(`/datalog?id=${id}`)
+                const data = await axios.get(`server/datalog?id=${id}`)
                 const arr = data
                 console.log(arr)
                 setLogs(arr.data.DataLogs)

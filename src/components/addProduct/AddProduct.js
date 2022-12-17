@@ -25,7 +25,7 @@ const AddProduct = () => {
         try {
             setLoader(true)
             const call = async () => {
-                const Id = await axios.get('/list')
+                const Id = await axios.get('server/list')
                 let newid = (Id.data.length > 0 ? Id.data[Id.data.length - 1].ProductId : 0)
                 newid++;
                 console.log(Id)
@@ -41,7 +41,7 @@ const AddProduct = () => {
     const addDetail = async () => {
         try {
             setLoader(true)
-            await axios.post('/productList',
+            await axios.post('server/productList',
                 {
                     ProductId: data.ProductId,
                     ProductName: data.ProductName,
